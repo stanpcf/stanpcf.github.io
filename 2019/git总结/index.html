@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="fork的仓库合并代码merge的三种方式在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种) 普通的merge这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。下图就是这种merge带来的繁琐gr">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git总结">
+<meta property="og:url" content="http://stanpcf.github.io/2019/git总结/index.html">
+<meta property="og:site_name" content="StanPcf&#39;s Note">
+<meta property="og:description" content="fork的仓库合并代码merge的三种方式在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种) 普通的merge这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。下图就是这种merge带来的繁琐gr">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stanpcf.github.io/2019/git总结/git.resources/CB0264F0-567B-4B64-BC45-15999D643B70.png">
+<meta property="og:image" content="http://stanpcf.github.io/2019/git总结/git.resources/2EE1E542-6352-4CB0-A8AD-0B5794C6E476.png">
+<meta property="og:updated_time" content="2019-02-17T07:13:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git总结">
+<meta name="twitter:description" content="fork的仓库合并代码merge的三种方式在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种) 普通的merge这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。下图就是这种merge带来的繁琐gr">
+<meta name="twitter:image" content="http://stanpcf.github.io/2019/git总结/git.resources/CB0264F0-567B-4B64-BC45-15999D643B70.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://stanpcf.github.io/2019/git总结/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>git总结 | StanPcf's Note</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StanPcf's Note</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stanpcf.github.io/2019/git总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stanpcf">
+      <meta itemprop="description" content="一枚爱生活的nlp算法喵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StanPcf's Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">git总结
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-02-17 15:10:04 / Modified: 15:13:47" itemprop="dateCreated datePublished" datetime="2019-02-17T15:10:04+08:00">2019-02-17</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">Comments: </span>
+                <a href="/2019/git总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/git总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="fork的仓库合并代码"><a href="#fork的仓库合并代码" class="headerlink" title="fork的仓库合并代码"></a>fork的仓库合并代码</h3><h4 id="merge的三种方式"><a href="#merge的三种方式" class="headerlink" title="merge的三种方式"></a>merge的三种方式</h4><p>在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种)</p>
+<h5 id="普通的merge"><a href="#普通的merge" class="headerlink" title="普通的merge"></a>普通的merge</h5><p>这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。<br>这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。<br>下图就是这种merge带来的繁琐graph<br><img src="/2019/git总结/git.resources/CB0264F0-567B-4B64-BC45-15999D643B70.png" alt="9c17413e518f29d44ddde6c8410030d1"></p>
+<h5 id="squash-merge-推荐"><a href="#squash-merge-推荐" class="headerlink" title="squash merge (推荐)"></a>squash merge (推荐)</h5><p>squash merge 是github上常用的merge方式。通常一个pr会有多个commit, 有些commit是对上一个commit的调整(比如说上一个commit的代码不符合pep8, 然后这个commit对上一个commit进行modify)。我们按照普通的merge进行merge的话,回报这些繁琐的信息保留下来, 这是不好的。这个时候我们需要将这个pr的多个commit合并为一个commit, 并选择一些信息作为最终commit的信息。这个时候就需要squash merge了</p>
+<h5 id="rebase-merge-推荐"><a href="#rebase-merge-推荐" class="headerlink" title="rebase merge (推荐)"></a>rebase merge (推荐)</h5><p>普通merge会保留许多合并点, 但是我们并不想看到这些点, 而是只想看到一条线的提交记录。<br>比如下图这样的<br><img src="/2019/git总结/git.resources/2EE1E542-6352-4CB0-A8AD-0B5794C6E476.png" alt="8a5a035b72aa04056c94fead78d29285"></p>
+<p>这个时候我们可以使用rebase merge。他会使用rebase将commit合并为一条线, 这样可以保证相对来说比较简洁</p>
+<p>比较好的博客<br><a href="https://www.jianshu.com/p/684a8ae9dcf1" target="_blank" rel="noopener">merge的三种合并方式</a><br><a href="https://www.cnblogs.com/pinefantasy/articles/6287147.html" target="_blank" rel="noopener">git rebase详解</a><br><a href="http://gitbook.liuhui998.com/4_2.html" target="_blank" rel="noopener">git rebase</a><br><a href="https://blog.csdn.net/coder1994/article/details/80639404" target="_blank" rel="noopener">squash merge</a></p>
+<h4 id="删除远程分支后-branch-a-还是能看到的解决办法"><a href="#删除远程分支后-branch-a-还是能看到的解决办法" class="headerlink" title="删除远程分支后, branch -a 还是能看到的解决办法"></a>删除远程分支后, <code>branch -a</code> 还是能看到的解决办法</h4><p>问题的重现:<br>假设现在有个仓库<code>owner/one_project</code>, 然后我clone一个到我的github上<code>my/one_project</code>。现在我在本地新建一个分支dev_fixbug并修改代码、add、commit、push到<code>my/one_project</code>。然后我们建立一个pr将dev_fixbug提交给<code>owner/one_project</code>。 owner在rebase merge了我们的代码后, 我们可以将这个dev_fixbug在github上直接delete掉, 或者本地执行<code>git push origin --delete dev_fixbug</code>。这个分支在远程remote上确实被删掉了。但是我们本地依然还会保留着<code>remotes/origin/dev_fixbug</code>(使用<code>git branch -a</code>即可查看)<br>解决办法是:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git remote show origin // 查看远程分支, 既可以查看到删除分支的情况</span><br><span class="line">$ git remote prune origin // 删除了本地的remotes/origin/dev_fixbug</span><br></pre></td></tr></table></figure></p>
+<p>这个时候我们使用<code>git branch -a</code>会发现<code>remotes/origin/dev_fixbug</code>被删除掉了</p>
+<h3 id="git-fetch-vs-git-pull"><a href="#git-fetch-vs-git-pull" class="headerlink" title="git fetch vs git pull"></a><code>git fetch</code> vs <code>git pull</code></h3><p>两者都是用来从remote上拉取代码的<br><code>git pull</code> 可以粗略的理解为<code>git fetch &amp;&amp; git merge</code><br>讲解区别的比较好的博客<a href="https://blog.csdn.net/riddle1981/article/details/74938111" target="_blank" rel="noopener">详解git fetch与git pull的区别</a></p>
+<h3 id="syncing-a-fork"><a href="#syncing-a-fork" class="headerlink" title="syncing a fork"></a><code>syncing a fork</code></h3><p>保持fork的项目同原始项目同步<br><a href="https://help.github.com/articles/syncing-a-fork/" target="_blank" rel="noopener">github官方文档</a><br>(其实在github上的最简单的姿势是取upstream所在的仓库, 然后点击fork,github就会将你的仓库同upstream仓库同步) </p>
+<h3 id="pull-request代码到别的仓库"><a href="#pull-request代码到别的仓库" class="headerlink" title="pull request代码到别的仓库"></a><code>pull request代码到别的仓库</code></h3><p><strong>标准姿势如下</strong></p>
+<ul>
+<li><ol>
+<li>假设该仓库为owner/repo.git, 首先要做的是fork该仓库到我们的账户下, 假设fork之后是my/repo.git</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>将我们的仓库clone下来</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>新建一个分支, 写代码, add, commit, push。</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>在github上将pr提交给owner, 待owner将分支合并到master即可将新建的分支在远程删掉</li>
+</ol>
+</li>
+</ul>
+<p><strong>上面的姿势的好处有如下几点:</strong></p>
+<ul>
+<li><ol>
+<li>我们不用将owner所拥有的远程仓库添加到我们本地代码作为upstream, 同步代码我们只需要在owner所在仓库的github主页上点击fork即可。</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>因为我们使用的分支是新建的分支, 我们在github上fork代码去做同步, 然后pull下来是不影响新建的这个分支的, 同时我们可以使用merge将主分支的修改合并到新建的分支上保持同步。</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>因为我们使用的是新建的分支, 这个分支被owner所接受后。我们在owner点击fork同步代码不会被该新建的分支所干扰(如果我们使用的是master分支做pull request的话, 我们提交后, 如果做同步代码的话会发生upstream的master合并到origin的master上面, 因为我们的master提交记录和owner上的提交记录不一致了。使用新建的分支做pr, 这样会使得我们的master分支始终和owner的master分支的log一致)</li>
+</ol>
+</li>
+</ul>
+<h3 id="git-服务搭建系统"><a href="#git-服务搭建系统" class="headerlink" title="git 服务搭建系统"></a>git 服务搭建系统</h3><p><a href="https://github.com/gogs/gogs" target="_blank" rel="noopener">gogs</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="stanpcf">
+            
+              <p class="site-author-name" itemprop="name">stanpcf</p>
+              <p class="site-description motion-element" itemprop="description">一枚爱生活的nlp算法喵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/stanpcf" title="GitHub &rarr; https://github.com/stanpcf" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:fpchappy@gmail.com" title="E-Mail &rarr; mailto:fpchappy@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#fork的仓库合并代码"><span class="nav-number">1.</span> <span class="nav-text">fork的仓库合并代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#merge的三种方式"><span class="nav-number">1.1.</span> <span class="nav-text">merge的三种方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#普通的merge"><span class="nav-number">1.1.1.</span> <span class="nav-text">普通的merge</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#squash-merge-推荐"><span class="nav-number">1.1.2.</span> <span class="nav-text">squash merge (推荐)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rebase-merge-推荐"><span class="nav-number">1.1.3.</span> <span class="nav-text">rebase merge (推荐)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除远程分支后-branch-a-还是能看到的解决办法"><span class="nav-number">1.2.</span> <span class="nav-text">删除远程分支后, branch -a 还是能看到的解决办法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-fetch-vs-git-pull"><span class="nav-number">2.</span> <span class="nav-text">git fetch vs git pull</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#syncing-a-fork"><span class="nav-number">3.</span> <span class="nav-text">syncing a fork</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pull-request代码到别的仓库"><span class="nav-number">4.</span> <span class="nav-text">pull request代码到别的仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-服务搭建系统"><span class="nav-number">5.</span> <span class="nav-text">git 服务搭建系统</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stanpcf</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'aJ230eVfAQHWlNnHlqVy9FzX-gzGzoHsz',
+    appKey: 'cOc9bDrqemrLQiKG2IQyUKi4',
+    placeholder: '说点什么吧',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -96,28 +96,25 @@
 
 
 
-  <meta name="description" content="fork的仓库合并代码merge的三种方式在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种) 普通的merge这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。下图就是这种merge带来的繁琐gr">
-<meta name="keywords" content="git">
+  <meta name="description" content="该篇博客主要记录一些tensorflow api理解 tf.global_variables_initializer表面上通常我们可以在一些tensorflow程序中看到有类似这样的一句代码sess.run(tf.global_variables_initializer())那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如">
+<meta name="keywords" content="tensorflow">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git总结">
-<meta property="og:url" content="http://stanpcf.github.io/2019/git总结/index.html">
+<meta property="og:title" content="tensorflow api总结">
+<meta property="og:url" content="http://stanpcf.github.io/2019/tensorflow-api总结/index.html">
 <meta property="og:site_name" content="StanPcf&#39;s Note">
-<meta property="og:description" content="fork的仓库合并代码merge的三种方式在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种) 普通的merge这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。下图就是这种merge带来的繁琐gr">
+<meta property="og:description" content="该篇博客主要记录一些tensorflow api理解 tf.global_variables_initializer表面上通常我们可以在一些tensorflow程序中看到有类似这样的一句代码sess.run(tf.global_variables_initializer())那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://stanpcf.github.io/2019/git总结/git.resources/CB0264F0-567B-4B64-BC45-15999D643B70.png">
-<meta property="og:image" content="http://stanpcf.github.io/2019/git总结/git.resources/2EE1E542-6352-4CB0-A8AD-0B5794C6E476.png">
-<meta property="og:updated_time" content="2019-02-19T14:41:16.000Z">
+<meta property="og:updated_time" content="2019-02-19T14:41:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="git总结">
-<meta name="twitter:description" content="fork的仓库合并代码merge的三种方式在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种) 普通的merge这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。下图就是这种merge带来的繁琐gr">
-<meta name="twitter:image" content="http://stanpcf.github.io/2019/git总结/git.resources/CB0264F0-567B-4B64-BC45-15999D643B70.png">
+<meta name="twitter:title" content="tensorflow api总结">
+<meta name="twitter:description" content="该篇博客主要记录一些tensorflow api理解 tf.global_variables_initializer表面上通常我们可以在一些tensorflow程序中看到有类似这样的一句代码sess.run(tf.global_variables_initializer())那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如">
 
 
 
 
 
 
-  <link rel="canonical" href="http://stanpcf.github.io/2019/git总结/">
+  <link rel="canonical" href="http://stanpcf.github.io/2019/tensorflow-api总结/">
 
 
 
@@ -127,7 +124,7 @@
   };
 </script>
 
-  <title>git总结 | StanPcf's Note</title>
+  <title>tensorflow api总结 | StanPcf's Note</title>
   
 
 
@@ -343,7 +340,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stanpcf.github.io/2019/git总结/">
+    <link itemprop="mainEntityOfPage" href="http://stanpcf.github.io/2019/tensorflow-api总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stanpcf">
@@ -360,7 +357,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">git总结
+          <h1 class="post-title" itemprop="name headline">tensorflow api总结
 
               
             
@@ -386,24 +383,12 @@
                 
               
 
-              <time title="Created: 2019-02-17 15:10:04" itemprop="dateCreated datePublished" datetime="2019-02-17T15:10:04+08:00">2019-02-17</time>
+              <time title="Created: 2019-02-19 22:35:55 / Modified: 22:41:14" itemprop="dateCreated datePublished" datetime="2019-02-19T22:35:55+08:00">2019-02-19</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-19 22:41:16" itemprop="dateModified" datetime="2019-02-19T22:41:16+08:00">2019-02-19</time>
               
             
           </span>
@@ -420,7 +405,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tensorflow/" itemprop="url" rel="index"><span itemprop="name">tensorflow</span></a></span>
 
                 
                 
@@ -455,52 +440,26 @@
       
 
       
-        <h3 id="fork的仓库合并代码"><a href="#fork的仓库合并代码" class="headerlink" title="fork的仓库合并代码"></a>fork的仓库合并代码</h3><h4 id="merge的三种方式"><a href="#merge的三种方式" class="headerlink" title="merge的三种方式"></a>merge的三种方式</h4><p>在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种)</p>
-<h5 id="普通的merge"><a href="#普通的merge" class="headerlink" title="普通的merge"></a>普通的merge</h5><p>这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。<br>这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。<br>下图就是这种merge带来的繁琐graph<br><img src="/2019/git总结/git.resources/CB0264F0-567B-4B64-BC45-15999D643B70.png" alt="9c17413e518f29d44ddde6c8410030d1"></p>
-<h5 id="squash-merge-推荐"><a href="#squash-merge-推荐" class="headerlink" title="squash merge (推荐)"></a>squash merge (推荐)</h5><p>squash merge 是github上常用的merge方式。通常一个pr会有多个commit, 有些commit是对上一个commit的调整(比如说上一个commit的代码不符合pep8, 然后这个commit对上一个commit进行modify)。我们按照普通的merge进行merge的话,回报这些繁琐的信息保留下来, 这是不好的。这个时候我们需要将这个pr的多个commit合并为一个commit, 并选择一些信息作为最终commit的信息。这个时候就需要squash merge了</p>
-<h5 id="rebase-merge-推荐"><a href="#rebase-merge-推荐" class="headerlink" title="rebase merge (推荐)"></a>rebase merge (推荐)</h5><p>普通merge会保留许多合并点, 但是我们并不想看到这些点, 而是只想看到一条线的提交记录。<br>比如下图这样的<br><img src="/2019/git总结/git.resources/2EE1E542-6352-4CB0-A8AD-0B5794C6E476.png" alt="8a5a035b72aa04056c94fead78d29285"></p>
-<p>这个时候我们可以使用rebase merge。他会使用rebase将commit合并为一条线, 这样可以保证相对来说比较简洁</p>
-<p>比较好的博客<br><a href="https://www.jianshu.com/p/684a8ae9dcf1" target="_blank" rel="noopener">merge的三种合并方式</a><br><a href="https://www.cnblogs.com/pinefantasy/articles/6287147.html" target="_blank" rel="noopener">git rebase详解</a><br><a href="http://gitbook.liuhui998.com/4_2.html" target="_blank" rel="noopener">git rebase</a><br><a href="https://blog.csdn.net/coder1994/article/details/80639404" target="_blank" rel="noopener">squash merge</a></p>
-<h4 id="删除远程分支后-branch-a-还是能看到的解决办法"><a href="#删除远程分支后-branch-a-还是能看到的解决办法" class="headerlink" title="删除远程分支后, branch -a 还是能看到的解决办法"></a>删除远程分支后, <code>branch -a</code> 还是能看到的解决办法</h4><p>问题的重现:<br>假设现在有个仓库<code>owner/one_project</code>, 然后我clone一个到我的github上<code>my/one_project</code>。现在我在本地新建一个分支dev_fixbug并修改代码、add、commit、push到<code>my/one_project</code>。然后我们建立一个pr将dev_fixbug提交给<code>owner/one_project</code>。 owner在rebase merge了我们的代码后, 我们可以将这个dev_fixbug在github上直接delete掉, 或者本地执行<code>git push origin --delete dev_fixbug</code>。这个分支在远程remote上确实被删掉了。但是我们本地依然还会保留着<code>remotes/origin/dev_fixbug</code>(使用<code>git branch -a</code>即可查看)<br>解决办法是:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git remote show origin // 查看远程分支, 既可以查看到删除分支的情况</span><br><span class="line">$ git remote prune origin // 删除了本地的remotes/origin/dev_fixbug</span><br></pre></td></tr></table></figure></p>
-<p>这个时候我们使用<code>git branch -a</code>会发现<code>remotes/origin/dev_fixbug</code>被删除掉了</p>
-<h3 id="git-fetch-vs-git-pull"><a href="#git-fetch-vs-git-pull" class="headerlink" title="git fetch vs git pull"></a><code>git fetch</code> vs <code>git pull</code></h3><p>两者都是用来从remote上拉取代码的<br><code>git pull</code> 可以粗略的理解为<code>git fetch &amp;&amp; git merge</code><br>讲解区别的比较好的博客<a href="https://blog.csdn.net/riddle1981/article/details/74938111" target="_blank" rel="noopener">详解git fetch与git pull的区别</a></p>
-<h3 id="syncing-a-fork"><a href="#syncing-a-fork" class="headerlink" title="syncing a fork"></a><code>syncing a fork</code></h3><p>保持fork的项目同原始项目同步<br><a href="https://help.github.com/articles/syncing-a-fork/" target="_blank" rel="noopener">github官方文档</a><br>(其实在github上的最简单的姿势是取upstream所在的仓库, 然后点击fork,github就会将你的仓库同upstream仓库同步) </p>
-<h3 id="pull-request代码到别的仓库"><a href="#pull-request代码到别的仓库" class="headerlink" title="pull request代码到别的仓库"></a><code>pull request代码到别的仓库</code></h3><p><strong>标准姿势如下</strong></p>
+        <p>该篇博客主要记录一些tensorflow api理解</p>
+<h2 id="tf-global-variables-initializer"><a href="#tf-global-variables-initializer" class="headerlink" title="tf.global_variables_initializer"></a>tf.global_variables_initializer</h2><h3 id="表面上"><a href="#表面上" class="headerlink" title="表面上"></a>表面上</h3><p>通常我们可以在一些tensorflow程序中看到有类似这样的一句代码<code>sess.run(tf.global_variables_initializer())</code><br>那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如下代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">tensor = tf.range(<span class="number">10</span>)</span><br><span class="line">out = tf.add(tensor, tensor)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(out.eval())</span><br></pre></td></tr></table></figure>
+<p>上面代码将会打印如下输出:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ 0  2  4  6  8 10 12 14 16 18]</span><br></pre></td></tr></table></figure></p>
+<p>因为上面的代码没有变量(准确说只要没有global_variables就行)，所以我们不用写这一句。</p>
+<h3 id="变量类型"><a href="#变量类型" class="headerlink" title="变量类型"></a>变量类型</h3><p>默认情况下，每个变量<code>tf.Variable</code>放置在两个集合中。</p>
 <ul>
-<li><ol>
-<li>假设该仓库为owner/repo.git, 首先要做的是fork该仓库到我们的账户下, 假设fork之后是my/repo.git</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>将我们的仓库clone下来</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>新建一个分支, 写代码, add, commit, push。</li>
-</ol>
-</li>
-<li><ol start="4">
-<li>在github上将pr提交给owner, 待owner将分支合并到master即可将新建的分支在远程删掉</li>
-</ol>
-</li>
+<li><a href="https://www.tensorflow.org/api_docs/python/tf/GraphKeys#GLOBAL_VARIABLES" target="_blank" rel="noopener"><code>tf.GraphKeys.GLOBAL_VARIABLES</code></a> - 可以在多台设备间共享的变量，</li>
+<li><a href="https://www.tensorflow.org/api_docs/python/tf/GraphKeys#TRAINABLE_VARIABLES" target="_blank" rel="noopener"><code>tf.GraphKeys.TRAINABLE_VARIABLES</code></a> - TensorFlow 将计算其梯度的变量。</li>
 </ul>
-<p><strong>上面的姿势的好处有如下几点:</strong></p>
-<ul>
-<li><ol>
-<li>我们不用将owner所拥有的远程仓库添加到我们本地代码作为upstream, 同步代码我们只需要在owner所在仓库的github主页上点击fork即可。</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>因为我们使用的分支是新建的分支, 我们在github上fork代码去做同步, 然后pull下来是不影响新建的这个分支的, 同时我们可以使用merge将主分支的修改合并到新建的分支上保持同步。</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>因为我们使用的是新建的分支, 这个分支被owner所接受后。我们在owner点击fork同步代码不会被该新建的分支所干扰(如果我们使用的是master分支做pull request的话, 我们提交后, 如果做同步代码的话会发生upstream的master合并到origin的master上面, 因为我们的master提交记录和owner上的提交记录不一致了。使用新建的分支做pr, 这样会使得我们的master分支始终和owner的master分支的log一致)</li>
-</ol>
-</li>
+<p>还有如果你希望你的变量不被训练，可以添加到 <a href="https://www.tensorflow.org/api_docs/python/tf/GraphKeys#LOCAL_VARIABLES" target="_blank" rel="noopener"><code>tf.GraphKeys.LOCAL_VARIABLES</code></a>。例如，以下代码段展示了如何将名为 <code>my_local</code> 的变量添加到此集合中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_local = tf.get_variable(<span class="string">"my_local"</span>, shape=(),collections=[tf.GraphKeys.LOCAL_VARIABLES])</span><br></pre></td></tr></table></figure>
+<p>或者，您可以指定 <code>trainable=False</code>（作为 <a href="https://www.tensorflow.org/api_docs/python/tf/get_variable" target="_blank" rel="noopener"><code>tf.get_variable</code></a> 的参数）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_non_trainable = tf.get_variable(<span class="string">"my_non_trainable"</span>, shape=(), trainable=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="实际上"><a href="#实际上" class="headerlink" title="实际上"></a>实际上</h3><p>由上面其实我们就可以看出，<code>tf.global_variables_initializer()</code>实际上是在初始化<code>tf.GraphKeys.GLOBAL_VARIABLES</code>集合中的所有变量.</p>
+<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><p>默认情况下，<a href="https://www.tensorflow.org/api_docs/python/tf/global_variables_initializer" target="_blank" rel="noopener"><code>tf.global_variables_initializer</code></a> 不会指定变量的初始化顺序。因此，如果变量的初始值取决于另一变量的值，那么很有可能会出现错误。任何时候，如果您在并非所有变量都已初始化的上下文中使用某个变量值（例如在初始化某个变量时使用另一变量的值），最好使用 <code>variable.initialized_value()</code>，而非 <code>variable</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v = tf.get_variable(&quot;v&quot;, shape=(), initializer=tf.zeros_initializer())</span><br><span class="line">w = tf.get_variable(&quot;w&quot;, initializer=v.initialized_value() + 1)</span><br></pre></td></tr></table></figure></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="https://www.tensorflow.org/guide/variables#initializing_variables" target="_blank" rel="noopener">https://www.tensorflow.org/guide/variables#initializing_variables</a></li>
 </ul>
-<h3 id="git-服务搭建系统"><a href="#git-服务搭建系统" class="headerlink" title="git 服务搭建系统"></a>git 服务搭建系统</h3><p><a href="https://github.com/gogs/gogs" target="_blank" rel="noopener">gogs</a></p>
-
+<h2 id="tf-control-dependencies"><a href="#tf-control-dependencies" class="headerlink" title="tf.control_dependencies"></a>tf.control_dependencies</h2>
       
     </div>
 
@@ -523,7 +482,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/git/" rel="tag"># git</a>
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
           
         </div>
       
@@ -536,15 +495,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/tensorflow-low-level-api/" rel="next" title="tensorflow low level api">
+                <i class="fa fa-chevron-left"></i> tensorflow low level api
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/tensorflow保存模型/" rel="prev" title="tensorflow保存模型与恢复">
-                tensorflow保存模型与恢复 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -724,7 +683,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#fork的仓库合并代码"><span class="nav-number">1.</span> <span class="nav-text">fork的仓库合并代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#merge的三种方式"><span class="nav-number">1.1.</span> <span class="nav-text">merge的三种方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#普通的merge"><span class="nav-number">1.1.1.</span> <span class="nav-text">普通的merge</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#squash-merge-推荐"><span class="nav-number">1.1.2.</span> <span class="nav-text">squash merge (推荐)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rebase-merge-推荐"><span class="nav-number">1.1.3.</span> <span class="nav-text">rebase merge (推荐)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除远程分支后-branch-a-还是能看到的解决办法"><span class="nav-number">1.2.</span> <span class="nav-text">删除远程分支后, branch -a 还是能看到的解决办法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-fetch-vs-git-pull"><span class="nav-number">2.</span> <span class="nav-text">git fetch vs git pull</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#syncing-a-fork"><span class="nav-number">3.</span> <span class="nav-text">syncing a fork</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pull-request代码到别的仓库"><span class="nav-number">4.</span> <span class="nav-text">pull request代码到别的仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-服务搭建系统"><span class="nav-number">5.</span> <span class="nav-text">git 服务搭建系统</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-global-variables-initializer"><span class="nav-number">1.</span> <span class="nav-text">tf.global_variables_initializer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表面上"><span class="nav-number">1.1.</span> <span class="nav-text">表面上</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量类型"><span class="nav-number">1.2.</span> <span class="nav-text">变量类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际上"><span class="nav-number">1.3.</span> <span class="nav-text">实际上</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意点"><span class="nav-number">1.4.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">1.5.</span> <span class="nav-text">参考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-control-dependencies"><span class="nav-number">2.</span> <span class="nav-text">tf.control_dependencies</span></a></li></ol></div>
             
 
           </div>

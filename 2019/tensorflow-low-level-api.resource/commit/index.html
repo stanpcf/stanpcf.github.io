@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="{&quot;compress&quot;:true,&quot;commitItems&quot;:[[&quot;4b9cacf4-bd7b-4d1a-8c0b-8dce37145ff1&quot;,1550635335197,&quot;---\ntitle: tensorflow low level api\ntags:\n - tensorflow\ncategories:\n - tensorflow\ndate: 2019-02-19 22:35:27">
+<meta property="og:type" content="article">
+<meta property="og:title" content="StanPcf&#39;s Note">
+<meta property="og:url" content="http://stanpcf.github.io/2019/tensorflow-low-level-api.resource/commit/index.html">
+<meta property="og:site_name" content="StanPcf&#39;s Note">
+<meta property="og:description" content="{&quot;compress&quot;:true,&quot;commitItems&quot;:[[&quot;4b9cacf4-bd7b-4d1a-8c0b-8dce37145ff1&quot;,1550635335197,&quot;---\ntitle: tensorflow low level api\ntags:\n - tensorflow\ncategories:\n - tensorflow\ndate: 2019-02-19 22:35:27">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-20T07:53:17.184Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="StanPcf&#39;s Note">
+<meta name="twitter:description" content="{&quot;compress&quot;:true,&quot;commitItems&quot;:[[&quot;4b9cacf4-bd7b-4d1a-8c0b-8dce37145ff1&quot;,1550635335197,&quot;---\ntitle: tensorflow low level api\ntags:\n - tensorflow\ncategories:\n - tensorflow\ndate: 2019-02-19 22:35:27">
+
+
+
+
+
+
+  <link rel="canonical" href="http://stanpcf.github.io/2019/tensorflow-low-level-api.resource/commit/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title> | StanPcf's Note</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StanPcf's Note</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stanpcf.github.io/2019/tensorflow-low-level-api.resource/commit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stanpcf">
+      <meta itemprop="description" content="一枚爱生活的nlp算法喵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StanPcf's Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-02-20 12:02:15 / Modified: 15:53:17" itemprop="dateCreated datePublished" datetime="2019-02-20T12:02:15+08:00">2019-02-20</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        {"compress":true,"commitItems":[["4b9cacf4-bd7b-4d1a-8c0b-8dce37145ff1",1550635335197,"---\ntitle: tensorflow low level api\ntags:\n - tensorflow\ncategories:\n - tensorflow\ndate: 2019-02-19 22:35:27\n---\n\n\n低级别的API构建TensorFlow模型\n使用低级别的Tensorflow API (Tensorflow Core)构建tensorflow程序\nTensorflow Core 程序可以看成互相独立的两部分:\n1. 构建计算图（`tf.Graph`）\n2. 运行计算图（`tf.Session`）\n\n示例下面的代码code1\n```python\n# 构建计算图\na = tf.constant(3.0, dtype=tf.float32)\nb = tf.constant(4.0)\ntotal = a + b\nprint(a)\nprint(b)\nprint(total)\n\n# 运行计算图\nsess = tf.Session()\nprint(sess.run(total))\n```\n\n打印语句会生成\n```\nTensor(\"Const:0\", shape=(), dtype=float32)\nTensor(\"Const_1:0\", shape=(), dtype=float32)\nTensor(\"add:0\", shape=(), dtype=float32)\n7.0\n```\n\n\n## tf.Graph\n**计算图**是排列成一个图的一系列 TensorFlow 指令。图由两种类型的对象组成。\n*   [操作](https://www.tensorflow.org/api_docs/python/tf/Operation)（简称“op”）：图的节点。操作描述了消耗和生成张量的计算。\n*   [张量](https://www.tensorflow.org/api_docs/python/tf/Tensor)：图的边。它们代表将流经图的值。大多数 TensorFlow 函数会返回 `tf.Tensors`。\n\n计算图是有向无环图\n\n### 操作(`tf.Operation`)\n图的节点(`tf.Operation`)\n上面的代码code1使用tensorboard可视化为\n![计算图](tensorflow-low-level-api/getting_started_add.png)\n里面`total = a + b`这个`a+b`语句会产生一个`Add` operation，即图的节点，该节点接受两个边(Tensor)`a`和`b`然后产生`total`这个边(其实调用tf.constant()也会产生一个新的`tf.Operation`, 并返回一个Tensor, 这个Tensor被赋给了`a`)\n\n### 张量(`tf.Tensor`)\n图的边(`tf.Tensor`)\n\n\n普通的张量\n  * `tf.Tensor`\n\n特殊的张量\n  *   [tf.Variable](https://www.tensorflow.org/api_docs/python/tf/Variable)\n  *   [tf.constant](https://www.tensorflow.org/api_docs/python/tf/constant)\n  *   [tf.placeholder](https://www.tensorflow.org/api_docs/python/tf/placeholder)\n  *   [tf.SparseTensor](https://www.tensorflow.org/api_docs/python/tf/SparseTensor)\n\n#### 普通的张量\n普通的张量类似于code1的里面的`total`\n详细介绍可参考:\n* https://www.tensorflow.org/guide/tensors\n\n#### tf.Variable\n与 [tf.Tensor](https://www.tensorflow.org/api_docs/python/tf/Tensor) 对象不同，[tf.Variable](https://www.tensorflow.org/api_docs/python/tf/Variable) 存在于单个 `session.run` 调用的上下文之外。\n\n在 TensorFlow 内部，[tf.Variable](https://www.tensorflow.org/api_docs/python/tf/Variable) 会存储持久性张量。具体 op 允许您读取和修改此张量的值。这些修改在多个 [tf.Session](https://www.tensorflow.org/api_docs/python/tf/Session) 之间是可见的，因此对于一个 [tf.Variable](https://www.tensorflow.org/api_docs/python/tf/Variable)，多个工作器可以看到相同的值。\n\n我们构建tensorflow模型并进行训练的目的便是学习到一组`Variable`值，这些`Variable`代表了一个学习后的模型。\n\n虽然`tf.Variable`是一种特殊的张量(特殊点在于其会被持久化，以及修改在多个`tf.Session`之间是可见的)。但是其还是张量，因此在tensorflow中使用`tf.Variable`的时候，只需将其视为普通的`tf.Tensor`就行\n\n具体变量如何重用共享可参考:\n* https://www.tensorflow.org/guide/variables\n\n## tf.Session\n对于构建的计算图，我们需要使用`tf.Session`封装TensorFlow 运行时的状态，并运行 TensorFlow 操作。如上面的code1。\n如果说 [tf.Graph](https://www.tensorflow.org/api_docs/python/tf/Graph) 像一个 `.py` 文件，那么 [tf.Session](https://www.tensorflow.org/api_docs/python/tf/Session) 就像一个 `python` 可执行对象。\n\n## 图和会话\n详细的图和会话参考:\n* https://www.tensorflow.org/guide/graphs\n\n\n",[[1550635327368,["pcf@FPC.local",[[1,2676,"ji"]],[2676,2676],[2678,2678]]],[1550635327910,["pcf@FPC.local",[[-1,2676,"ji"]],[2678,2678],[2676,2676]]],[1550635328715,["pcf@FPC.local",[[1,2676,"Jioa"]],[2676,2676],[2680,2680]]],[1550635329523,["pcf@FPC.local",[[-1,2676,"Jioa"]],[2680,2680],[2676,2676]]],[1550635330086,["pcf@FPC.local",[[1,2676,"JI"]],[2676,2676],[2678,2678]]],[1550635330576,["pcf@FPC.local",[[-1,2676,"JI"]],[2678,2678],[2676,2676]]],[1550635331159,["pcf@FPC.local",[[1,2676,"JI"]],[2676,2676],[2678,2678]]],[1550635331639,["pcf@FPC.local",[[-1,2676,"JI"]],[2678,2678],[2676,2676]]],[1550635334629,["pcf@FPC.local",[[1,2676,"交互"]],[2676,2676],[2678,2678]]],[1550636204605,["pcf@FPC.local",[[1,2661,"\n"]],[2659,2659],[2660,2660]]],[1550636217733,["pcf@FPC.local",[[1,2660,"### ’‘"]],[2660,2660],[2666,2666]]],[1550636220764,["pcf@FPC.local",[[-1,2660,"### ’‘"]],[2666,2666],[2660,2660]]],[1550636242433,["pcf@FPC.local",[[1,2662,"\n"]],[2660,2660],[2661,2661]]],[1550636250669,["pcf@FPC.local",[[-1,2400,"tf.Session"]],[2400,2410],[2400,2400]]],[1550636251666,["pcf@FPC.local",[[1,2400,"hui"]],[2400,2400],[2403,2403]]],[1550636252323,["pcf@FPC.local",[[-1,2400,"hui"]],[2403,2403],[2400,2400]]],[1550636254302,["pcf@FPC.local",[[1,2400,"会话"]],[2400,2400],[2402,2402]]],[1550636265523,["pcf@FPC.local",[[1,2403,"\n"]],[2402,2402],[2403,2403]]],[1550636279116,["pcf@FPC.local",[[1,2403,"通常我们说会话指的"]],[2403,2403],[2412,2412]]],[1550636284847,["pcf@FPC.local",[[-1,2403,"通常我们说会话指的"]],[2412,2412],[2403,2403]]],[1550636285581,["pcf@FPC.local",[[-1,2403,"\n"]],[2403,2403],[2402,2402]]],[1550636291028,["pcf@FPC.local",[[1,2652,"通常的会话"]],[2652,2652],[2657,2657]]],[1550636293310,["pcf@FPC.local",[[-1,2652,"通常的会话"]],[2657,2657],[2652,2652]]],[1550636303572,["pcf@FPC.local",[[1,2652,"绝大部分会话是使用··"]],[2652,2652],[2663,2663]]],[1550636304285,["pcf@FPC.local",[[-1,2661,"··"]],[2663,2663],[2661,2661]]],[1550636305110,["pcf@FPC.local",[[1,2661,"``"]],[2661,2661],[2663,2663]]],[1550636306882,["pcf@FPC.local",[[1,2662,"tf.s"]],[2662,2662],[2666,2666]]],[1550636307374,["pcf@FPC.local",[[-1,2665,"s"]],[2666,2666],[2665,2665]]],[1550636309735,["pcf@FPC.local",[[1,2665,"Session"]],[2665,2665],[2672,2672]]],[1550636312706,["pcf@FPC.local",[[1,2673,"来实现的"]],[2673,2673],[2677,2677]]],[1550636314105,["pcf@FPC.local",[[1,2677,"."]],[2677,2677],[2678,2678]]],[1550636314859,["pcf@FPC.local",[[-1,2677,"."]],[2678,2678],[2677,2677]]],[1550636315361,["pcf@FPC.local",[[1,2677,"。"]],[2677,2677],[2678,2678]]],[1550636316268,["pcf@FPC.local",[[1,2681,"\n"]],[2678,2678],[2679,2679]]],[1550636316787,["pcf@FPC.local",[[1,2679,"da"]],[2679,2679],[2681,2681]]],[1550636317476,["pcf@FPC.local",[[-1,2679,"da"]],[2681,2681],[2679,2679]]],[1550636323406,["pcf@FPC.local",[[1,2679,"但是还是有一小部分的"]],[2679,2679],[2689,2689]]],[1550636327560,["pcf@FPC.local",[[-1,2679,"但是还是有一小部分的"]],[2689,2689],[2679,2679]]],[1550636329656,["pcf@FPC.local",[[1,2679,"但是"]],[2679,2679],[2681,2681]]],[1550636330456,["pcf@FPC.local",[[-1,2679,"但是"]],[2681,2681],[2679,2679]]],[1550636342037,["pcf@FPC.local",[[1,2679,"其实会话还是有好几种的"]],[2679,2679],[2690,2690]]],[1550636375572,["pcf@FPC.local",[[-1,2679,"其实会话还是有好几种的"]],[2690,2690],[2679,2679]]],[1550636377305,["pcf@FPC.local",[[1,2679,"除了"]],[2679,2679],[2681,2681]]],[1550636380233,["pcf@FPC.local",[[-1,2679,"除了"]],[2681,2681],[2679,2679]]],[1550636388747,["pcf@FPC.local",[[1,2679,"其实会话还是有好几种的"]],[2679,2679],[2690,2690]]],[1550636395263,["pcf@FPC.local",[[-1,2679,"其实会话还是有好几种的"]],[2690,2690],[2679,2679]]],[1550636396634,["pcf@FPC.local",[[1,2679,"chul"]],[2679,2679],[2683,2683]]],[1550636397407,["pcf@FPC.local",[[-1,2679,"chul"]],[2683,2683],[2679,2679]]],[1550636398675,["pcf@FPC.local",[[1,2679,"除了"]],[2679,2679],[2681,2681]]],[1550636405253,["pcf@FPC.local",[[-1,2679,"除了"]],[2681,2681],[2679,2679]]],[1550636410496,["pcf@FPC.local",[[1,2656,"tn"]],[2656,2656],[2658,2658]]],[1550636410973,["pcf@FPC.local",[[-1,2657,"n"]],[2658,2658],[2657,2657]]],[1550636414391,["pcf@FPC.local",[[1,2657,"ensorflow程序"]],[2657,2657],[2668,2668]]],[1550636416650,["pcf@FPC.local",[[-1,2693,"\n"]],[2692,2692],[2691,2691]]],[1550636418532,["pcf@FPC.local",[[1,2691,"tee"]],[2691,2691],[2694,2694]]],[1550636419396,["pcf@FPC.local",[[-1,2691,"tee"]],[2694,2694],[2691,2691]]],[1550636424230,["pcf@FPC.local",[[1,2691,"特殊的会话还有"]],[2691,2691],[2698,2698]]],[1550636425307,["pcf@FPC.local",[[1,2700,"\n"]],[2698,2698],[2699,2699]]],[1550636426272,["pcf@FPC.local",[[1,2699,"``"]],[2699,2699],[2701,2701]]],[1550636428082,["pcf@FPC.local",[[-1,2699,"``"]],[2701,2701],[2699,2699]]],[1550636430777,["pcf@FPC.local",[[1,2699,"* tf."]],[2699,2699],[2704,2704]]],[1550636432542,["pcf@FPC.local",[[-1,2701,"tf."]],[2704,2704],[2701,2701]]],[1550636434501,["pcf@FPC.local",[[1,2701,"``"]],[2701,2701],[2703,2703]]],[1550636444532,["pcf@FPC.local",[[1,2702,"tf.InteractiveSession"]],[2702,2702],[2723,2723]]],[1550636445919,["pcf@FPC.local",[[1,2725,"* \n"]],[2724,2724],[2727,2727]]],[1550636447731,["pcf@FPC.local",[[1,2727,"``"]],[2727,2727],[2729,2729]]],[1550636460361,["pcf@FPC.local",[[1,2728,"tf_debug.LocalCLIDebugWrapperSession"]],[2728,2728],[2764,2764]]],[1550636462352,["pcf@FPC.local",[[1,2766,"* \n"]],[2765,2765],[2768,2768]]],[1550636470430,["pcf@FPC.local",[[1,2768,"``"]],[2768,2768],[2770,2770]]],[1550636471606,["pcf@FPC.local",[[1,2769,"tf_debug.TensorBoardDebugWrapperSession"]],[2769,2769],[2808,2808]]],[1550636473547,["pcf@FPC.local",[[1,2810,"* \n"]],[2809,2809],[2812,2812]]],[1550636474315,["pcf@FPC.local",[[-1,2811," "]],[2812,2812],[2811,2811]]],[1550636475614,["pcf@FPC.local",[[1,2813,"\n"]],[2811,2811],[2812,2812]]],[1550636477497,["pcf@FPC.local",[[-1,2813,"\n"]],[2812,2812],[2811,2811]]],[1550636477851,["pcf@FPC.local",[[-1,2810,"*"]],[2811,2811],[2810,2810]]],[1550636478560,["pcf@FPC.local",[[1,2812,"\n"]],[2810,2810],[2811,2811]]],[1550636485759,["pcf@FPC.local",[[1,2811,"### ``"]],[2811,2811],[2817,2817]]],[1550636487217,["pcf@FPC.local",[[1,2816,"TF."]],[2816,2816],[2819,2819]]],[1550636487905,["pcf@FPC.local",[[-1,2816,"TF."]],[2819,2819],[2816,2816]]],[1550636491450,["pcf@FPC.local",[[1,2816,"tf.Session"]],[2816,2816],[2826,2826]]],[1550636492356,["pcf@FPC.local",[[1,2829,"\n"]],[2827,2827],[2828,2828]]],[1550636496174,["pcf@FPC.local",[[1,2698,"，"]],[2698,2698],[2699,2699]]],[1550636496864,["pcf@FPC.local",[[-1,2698,"，"]],[2699,2699],[2698,2698]]],[1550636526847,["pcf@FPC.local",[[1,2698,"，这些会话主要用于进行debug作用"]],[2698,2698],[2716,2716]]],[1550636571485,["pcf@FPC.local",[[1,2846,"zh"]],[2846,2846],[2848,2848]]],[1550636572020,["pcf@FPC.local",[[-1,2846,"zh"]],[2848,2848],[2846,2846]]],[1550636584676,["pcf@FPC.local",[[1,2846,"这是最常用的会话"]],[2846,2846],[2854,2854]]],[1550636585131,["pcf@FPC.local",[[1,2856,"\n"]],[2854,2854],[2855,2855]]],[1550636586136,["pcf@FPC.local",[[1,2857,"\n"]],[2855,2855],[2856,2856]]],[1550636587231,["pcf@FPC.local",[[1,2856,"###"]],[2856,2856],[2859,2859]]],[1550636589226,["pcf@FPC.local",[[1,2859," ``"]],[2859,2859],[2862,2862]]],[1550636599391,["pcf@FPC.local",[[1,2861,"tf.InteractiveSession"]],[2861,2861],[2882,2882]]],[1550637070093,["pcf@FPC.local",[[1,2698,"he"]],[2698,2698],[2700,2700]]],[1550637070607,["pcf@FPC.local",[[-1,2698,"he"]],[2700,2700],[2698,2698]]],[1550637072016,["pcf@FPC.local",[[1,2698,"很多"]],[2698,2698],[2700,2700]]],[1550637073503,["pcf@FPC.local",[[-1,2700,"，"]],[2701,2701],[2700,2700]]],[1550637077568,["pcf@FPC.local",[[1,2700,"。下面列出的"]],[2700,2700],[2706,2706]]],[1550637083531,["pcf@FPC.local",[[1,2723,"，还是"]],[2723,2723],[2726,2726]]],[1550637089872,["pcf@FPC.local",[[1,2726,"比较常用的一种"]],[2726,2726],[2733,2733]]]],null,"pcf@FPC.local"],["ccb74fb1-d9bf-4d65-9c61-51694a4f25f8",1550644938092,"---\ntitle: tensorflow low level api\ntags:\n - tensorflow\ncategories:\n - tensorflow\ndate: 2019-02-19 22:35:27\n---\n\n\n低级别的API构建TensorFlow模型\n使用低级别的Tensorflow API (Tensorflow Core)构建tensorflow程序\nTensorflow Core 程序可以看成互相独立的两部分:\n1. 构建计算图（`tf.Graph`）\n2. 运行计算图（`tf.Session`）\n\n示例下面的代码code1\n```python\n# 构建计算图\na = tf.constant(3.0, dtype=tf.float32)\nb = tf.constant(4.0)\ntotal = a + b\nprint(a)\nprint(b)\nprint(total)\n\n# 运行计算图\nsess = tf.Session()\nprint(sess.run(total))\n```\n\n打印语句会生成\n```\nTensor(\"Const:0\", shape=(), dtype=float32)\nTensor(\"Const_1:0\", shape=(), dtype=float32)\nTensor(\"add:0\", shape=(), dtype=float32)\n7.0\n```\n\n\n## tf.Graph\n**计算图**是排列成一个图的一系列 TensorFlow 指令。图由两种类型的对象组成。\n*   [操作](https://www.tensorflow.org/api_docs/python/tf/Operation)（简称“op”）：图的节点。操作描述了消耗和生成张量的计算。\n*   [张量](https://www.tensorflow.org/api_docs/python/tf/Tensor)：图的边。它们代表将流经图的值。大多数 TensorFlow 函数会返回 `tf.Tensors`。\n\n计算图是有向无环图\n\n### 操作(`tf.Operation`)\n图的节点(`tf.Operation`)\n上面的代码code1使用tensorboard可视化为\n![计算图](tensorflow-low-level-api/getting_started_add.png)\n里面`total = a + b`这个`a+b`语句会产生一个`Add` operation，即图的节点，该节点接受两个边(Tensor)`a`和`b`然后产生`total`这个边(其实调用tf.constant()也会产生一个新的`tf.Operation`, 并返回一个Tensor, 这个Tensor被赋给了`a`)\n\n### 张量(`tf.Tensor`)\n图的边(`tf.Tensor`)\n\n\n普通的张量\n  * `tf.Tensor`\n\n特殊的张量\n  *   [tf.Variable](https://www.tensorflow.org/api_docs/python/tf/Variable)\n  *   [tf.constant](https://www.tensorflow.org/api_docs/python/tf/constant)\n  *   [tf.placeholder](https://www.tensorflow.org/api_docs/python/tf/placeholder)\n  *   [tf.SparseTensor](https://www.tensorflow.org/api_docs/python/tf/SparseTensor)\n\n#### 普通的张量\n普通的张量类似于code1的里面的`total`\n详细介绍可参考:\n* https://www.tensorflow.org/guide/tensors\n\n#### tf.Variable\n与 [tf.Tensor](https://www.tensorflow.org/api_docs/python/tf/Tensor) 对象不同，[tf.Variable](https://www.tensorflow.org/api_docs/python/tf/Variable) 存在于单个 `session.run` 调用的上下文之外。\n\n在 TensorFlow 内部，[tf.Variable](https://www.tensorflow.org/api_docs/python/tf/Variable) 会存储持久性张量。具体 op 允许您读取和修改此张量的值。这些修改在多个 [tf.Session](https://www.tensorflow.org/api_docs/python/tf/Session) 之间是可见的，因此对于一个 [tf.Variable](https://www.tensorflow.org/api_docs/python/tf/Variable)，多个工作器可以看到相同的值。\n\n我们构建tensorflow模型并进行训练的目的便是学习到一组`Variable`值，这些`Variable`代表了一个学习后的模型。\n\n虽然`tf.Variable`是一种特殊的张量(特殊点在于其会被持久化，以及修改在多个`tf.Session`之间是可见的)。但是其还是张量，因此在tensorflow中使用`tf.Variable`的时候，只需将其视为普通的`tf.Tensor`就行\n\n具体变量如何重用共享可参考:\n* https://www.tensorflow.org/guide/variables\n\n## 会话\n对于构建的计算图，我们需要使用`tf.Session`封装TensorFlow 运行时的状态，并运行 TensorFlow 操作。如上面的code1。\n如果说 [tf.Graph](https://www.tensorflow.org/api_docs/python/tf/Graph) 像一个 `.py` 文件，那么 [tf.Session](https://www.tensorflow.org/api_docs/python/tf/Session) 就像一个 `python` 可执行对象。\n绝大部分tensorflow程序会话是使用`tf.Session`来实现的。\n特殊的会话还有很多。下面列出的这些会话主要用于进行debug作用，还是比较常用的一种\n* `tf.InteractiveSession`\n* `tf_debug.LocalCLIDebugWrapperSession`\n* `tf_debug.TensorBoardDebugWrapperSession`\n\n### `tf.Session`\n这是最常用的会话\n\n### `tf.InteractiveSession`\n\n## 图和会话\n详细的图和会话交互参考:\n* https://www.tensorflow.org/guide/graphs\n\n\n",[[1550644908460,["pcf@FPC.local",[[1,2902,"\n"]],[2900,2900],[2901,2901]]],[1550644908650,["pcf@FPC.local",[[1,2903,"\n"]],[2901,2901],[2902,2902]]],[1550644910521,["pcf@FPC.local",[[1,2902,"### "]],[2902,2902],[2906,2906]]],[1550644918312,["pcf@FPC.local",[[-1,2850,"`"]],[2851,2851],[2850,2850]]],[1550644919671,["pcf@FPC.local",[[-1,2860,"`"]],[2861,2861],[2860,2860]]],[1550644922677,["pcf@FPC.local",[[-1,2897,"`"]],[2898,2898],[2897,2897]]],[1550644924622,["pcf@FPC.local",[[-1,2875,"`"]],[2876,2876],[2875,2875]]],[1550644929860,["pcf@FPC.local",[[1,2902,"tf_debug.LocalCLIDebugWrapperSession"]],[2902,2902],[2938,2938]]],[1550644934627,["pcf@FPC.local",[[1,2940,"\n"]],[2938,2938],[2939,2939]]],[1550644935132,["pcf@FPC.local",[[1,2941,"\n"]],[2939,2939],[2940,2940]]],[1550644937414,["pcf@FPC.local",[[1,2940,"### tf_debug.TensorBoardDebugWrapperSession"]],[2940,2940],[2983,2983]]],[1550647592554,["pcf@FPC.local",[[1,2846,"\n"]],[2845,2845],[2846,2846]]],[1550647593790,["pcf@FPC.local",[[1,2846,"xia"]],[2846,2846],[2849,2849]]],[1550647594445,["pcf@FPC.local",[[-1,2846,"xia"]],[2849,2849],[2846,2846]]],[1550647595509,["pcf@FPC.local",[[1,2846,"xiat"]],[2846,2846],[2850,2850]]],[1550647596259,["pcf@FPC.local",[[-1,2846,"xiat"]],[2850,2850],[2846,2846]]],[1550647596589,["pcf@FPC.local",[[1,2846,"x"]],[2846,2846],[2847,2847]]],[1550647597037,["pcf@FPC.local",[[-1,2846,"x"]],[2847,2847],[2846,2846]]],[1550647597496,["pcf@FPC.local",[[1,2846,"x"]],[2846,2846],[2847,2847]]],[1550647597875,["pcf@FPC.local",[[-1,2846,"x"]],[2847,2847],[2846,2846]]],[1550647599614,["pcf@FPC.local",[[1,2846,"xi"]],[2846,2846],[2848,2848]]],[1550647600119,["pcf@FPC.local",[[-1,2846,"xi"]],[2848,2848],[2846,2846]]],[1550647620104,["pcf@FPC.local",[[1,2846,"下图展示四种Session类的继承关系"]],[2846,2846],[2865,2865]]],[1550648856701,["pcf@FPC.local",[[1,2866,"\n"]],[2865,2865],[2866,2866]]],[1550648882804,["pcf@FPC.local",[[1,2866,"！"]],[2866,2866],[2867,2867]]],[1550648883663,["pcf@FPC.local",[[-1,2866,"！"]],[2867,2867],[2866,2866]]],[1550648885600,["pcf@FPC.local",[[1,2866,"![]("]],[2866,2866],[2870,2870]]],[1550648885643,["pcf@FPC.local",[[1,2870,"https://)"]],[2870,2870],[2870,2878]]],[1550648885828,["pcf@FPC.local",[[-1,2870,"https://"],[1,2878,")"]],[2870,2878],[2871,2871]]],[1550648886863,["pcf@FPC.local",[[-1,2871,")"]],[2871,2871],[2870,2870]]],[1550648888534,["pcf@FPC.local",[[1,2870,"./"]],[2870,2870],[2872,2872]]],[1550648889492,["pcf@FPC.local",[[-1,2870,"./"]],[2872,2872],[2870,2870]]],[1550648910676,["pcf@FPC.local",[[1,2870,"tensorflow-low-level-api/session_uml.png"]],[2870,2870],[2910,2910]]],[1550648912118,["pcf@FPC.local",[[-1,2907,"png"]],[2910,2910],[2907,2907]]],[1550648912558,["pcf@FPC.local",[[1,2907,"h"]],[2907,2907],[2908,2908]]],[1550648913170,["pcf@FPC.local",[[-1,2907,"h"]],[2908,2908],[2907,2907]]],[1550648914400,["pcf@FPC.local",[[1,2907,"jpg"]],[2907,2907],[2910,2910]]],[1550649043358,["pcf@FPC.local",[[1,2912,"\n"]],[2911,2911],[2912,2912]]],[1550649045770,["pcf@FPC.local",[[-1,2912,"\n"]],[2912,2912],[2911,2911]]],[1550649048571,["pcf@FPC.local",[[1,2868,"t"]],[2868,2868],[2869,2869]]],[1550649048968,["pcf@FPC.local",[[-1,2868,"t"]],[2869,2869],[2868,2868]]],[1550649050599,["pcf@FPC.local",[[1,2868,"hu"]],[2868,2868],[2870,2870]]],[1550649051125,["pcf@FPC.local",[[-1,2868,"hu"]],[2870,2870],[2868,2868]]],[1550649057290,["pcf@FPC.local",[[1,2868,"会话继承关系"]],[2868,2868],[2874,2874]]],[1550649131104,["pcf@FPC.local",[[1,2970,"\n"]],[2968,2968],[2969,2969]]],[1550649168742,["pcf@FPC.local",[[1,3058,"\n"]],[3056,3056],[3057,3057]]],[1550649176592,["pcf@FPC.local",[[1,3057,"详细参考:"]],[3057,3057],[3062,3062]]],[1550649177708,["pcf@FPC.local",[[1,3064,"\n"]],[3062,3062],[3063,3063]]],[1550649179605,["pcf@FPC.local",[[1,3063,"* https://github.com/tensorflow/tensorboard/blob/master/tensorboard/plugins/debugger/README.md"]],[3063,3063],[3157,3157]]],[1550649184402,["pcf@FPC.local",[[1,3013,"\n"]],[3011,3011],[3012,3012]]],[1550649186452,["pcf@FPC.local",[[1,3012,"* s"]],[3012,3012],[3015,3015]]],[1550649187592,["pcf@FPC.local",[[-1,3014,"s"]],[3015,3015],[3014,3014]]],[1550649188459,["pcf@FPC.local",[[1,3014,"ss"]],[3014,3014],[3016,3016]]],[1550649189526,["pcf@FPC.local",[[-1,3014,"ss"]],[3016,3016],[3014,3014]]],[1550649190476,["pcf@FPC.local",[[1,3014,"he"]],[3014,3014],[3016,3016]]],[1550649191105,["pcf@FPC.local",[[-1,3014,"he"]],[3016,3016],[3014,3014]]],[1550649192506,["pcf@FPC.local",[[1,3014,"河南省"]],[3014,3014],[3017,3017]]],[1550649195343,["pcf@FPC.local",[[-1,3014,"河南省"]],[3017,3017],[3014,3014]]],[1550649196724,["pcf@FPC.local",[[1,3014,"河南省"]],[3014,3014],[3017,3017]]]],null,"pcf@FPC.local"]]}
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/tensorflow-api总结/" rel="next" title="tensorflow api总结">
+                <i class="fa fa-chevron-left"></i> tensorflow api总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/tensorflow-debug/" rel="prev" title="tensorflow debug">
+                tensorflow debug <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="stanpcf">
+            
+              <p class="site-author-name" itemprop="name">stanpcf</p>
+              <p class="site-description motion-element" itemprop="description">一枚爱生活的nlp算法喵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/stanpcf" title="GitHub &rarr; https://github.com/stanpcf" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:fpchappy@gmail.com" title="E-Mail &rarr; mailto:fpchappy@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stanpcf</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

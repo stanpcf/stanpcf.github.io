@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="简介本篇博客讲解tensorflow如何将数据灌进模型进行训练 tensorflow有两种将数据灌进tensorflow计算图的方法  使用tf.placeholder 使用tf.Data  tf.placeholder占位符适用于简单的实验参考:   https://www.tensorflow.org/guide/low_level_intro#feeding  tf.datatf.data模">
+<meta name="keywords" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorflow数据输入">
+<meta property="og:url" content="http://stanpcf.github.io/2019/tensorflow数据输入/index.html">
+<meta property="og:site_name" content="StanPcf&#39;s Note">
+<meta property="og:description" content="简介本篇博客讲解tensorflow如何将数据灌进模型进行训练 tensorflow有两种将数据灌进tensorflow计算图的方法  使用tf.placeholder 使用tf.Data  tf.placeholder占位符适用于简单的实验参考:   https://www.tensorflow.org/guide/low_level_intro#feeding  tf.datatf.data模">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-21T15:07:14.993Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tensorflow数据输入">
+<meta name="twitter:description" content="简介本篇博客讲解tensorflow如何将数据灌进模型进行训练 tensorflow有两种将数据灌进tensorflow计算图的方法  使用tf.placeholder 使用tf.Data  tf.placeholder占位符适用于简单的实验参考:   https://www.tensorflow.org/guide/low_level_intro#feeding  tf.datatf.data模">
+
+
+
+
+
+
+  <link rel="canonical" href="http://stanpcf.github.io/2019/tensorflow数据输入/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>tensorflow数据输入 | StanPcf's Note</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StanPcf's Note</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stanpcf.github.io/2019/tensorflow数据输入/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stanpcf">
+      <meta itemprop="description" content="一枚爱生活的nlp算法喵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StanPcf's Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">tensorflow数据输入
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-02-21 23:07:14" itemprop="dateCreated datePublished" datetime="2019-02-21T23:07:14+08:00">2019-02-21</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tensorflow/" itemprop="url" rel="index"><span itemprop="name">tensorflow</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>本篇博客讲解tensorflow如何将数据灌进模型进行训练</p>
+<p>tensorflow有两种将数据灌进tensorflow计算图的方法</p>
+<ol>
+<li>使用<code>tf.placeholder</code></li>
+<li>使用<code>tf.Data</code></li>
+</ol>
+<h1 id="tf-placeholder"><a href="#tf-placeholder" class="headerlink" title="tf.placeholder"></a>tf.placeholder</h1><p>占位符适用于简单的实验<br>参考: </p>
+<ul>
+<li><a href="https://www.tensorflow.org/guide/low_level_intro#feeding" target="_blank" rel="noopener">https://www.tensorflow.org/guide/low_level_intro#feeding</a></li>
+</ul>
+<h1 id="tf-data"><a href="#tf-data" class="headerlink" title="tf.data"></a>tf.data</h1><p><code>tf.data</code>模块是tensorflow将数据流式传输到模型的首选方法。也是本篇博客的重点<br>参考:</p>
+<ul>
+<li><a href="https://www.tensorflow.org/guide/datasets" target="_blank" rel="noopener">https://www.tensorflow.org/guide/datasets</a></li>
+<li><a href="https://www.tensorflow.org/guide/low_level_intro#datasets" target="_blank" rel="noopener">https://www.tensorflow.org/guide/low_level_intro#datasets</a></li>
+</ul>
+<p>在该模块中TensorFlow引入了两个新的抽象类</p>
+<ul>
+<li><a href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset" target="_blank" rel="noopener"><code>tf.data.Dataset</code></a>表示一系列元素，其中每个元素包含一个或多个 <code>Tensor</code> 对象。例如，在图像管道中，元素可能是单个训练样本，具有一对表示图像数据和标签的张量。</li>
+<li><a href="https://www.tensorflow.org/api_docs/python/tf/data/Iterator" target="_blank" rel="noopener"><code>tf.data.Iterator</code></a> 提供了从数据集中提取元素的主要方法。</li>
+</ul>
+<h2 id="tf-data-Dataset"><a href="#tf-data-Dataset" class="headerlink" title="tf.data.Dataset"></a>tf.data.Dataset</h2><p><code>tf.data.Dataset</code>代表了一系列元素，每个元素包含一个或者多个<code>Tensor</code>对象。例如，在图像管道中，元素可能是单个训练样本，具有一对表示图像数据和标签的张量。可以通过两种不同的方式来创建数据集:</p>
+<ul>
+<li>创建<strong>来源</strong>（例如 <code>Dataset.from_tensor_slices()</code>），以通过一个或多个 <a href="https://www.tensorflow.org/api_docs/python/tf/Tensor" target="_blank" rel="noopener"><code>tf.Tensor</code></a> 对象构建数据集。</li>
+<li>应用<strong>转换</strong>（例如 <code>Dataset.batch()</code>），以通过一个或多个 <a href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset" target="_blank" rel="noopener"><code>tf.data.Dataset</code></a> 对象构建数据集。</li>
+</ul>
+<h3 id="创建数据集"><a href="#创建数据集" class="headerlink" title="创建数据集"></a>创建数据集</h3><p>下面将详细讲解如何创建数据集</p>
+<h4 id="创建来源"><a href="#创建来源" class="headerlink" title="创建来源"></a>创建来源</h4><p><code>tf.data.Dataset</code>提供了四个静态方法来创建数据集</p>
+<h5 id="tf-data-Dataset-from-tensors"><a href="#tf-data-Dataset-from-tensors" class="headerlink" title="tf.data.Dataset.from_tensors"></a>tf.data.Dataset.from_tensors</h5><p>函数签名为<code>def from_tensors(tensors) -&gt; TensorDataset</code><br>使用方法差不多同下面的<code>tf.data.Dataset.from_tensor_slices</code></p>
+<h5 id="tf-data-Dataset-from-tensor-slices"><a href="#tf-data-Dataset-from-tensor-slices" class="headerlink" title="tf.data.Dataset.from_tensor_slices"></a>tf.data.Dataset.from_tensor_slices</h5><p>函数签名为<code>def from_tensor_slices(tensors) -&gt; TensorSliceDataset</code><br>代码使用样例如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">dataset1 = tf.data.Dataset.from_tensor_slices(tf.random_uniform([<span class="number">4</span>, <span class="number">10</span>]))</span><br><span class="line">print(dataset1.output_types)  <span class="comment"># ==&gt; "tf.float32"</span></span><br><span class="line">print(dataset1.output_shapes)  <span class="comment"># ==&gt; "(10,)"</span></span><br><span class="line"></span><br><span class="line">dataset2 = tf.data.Dataset.from_tensor_slices(</span><br><span class="line">   (tf.random_uniform([<span class="number">4</span>]),</span><br><span class="line">    tf.random_uniform([<span class="number">4</span>, <span class="number">100</span>], maxval=<span class="number">100</span>, dtype=tf.int32)))</span><br><span class="line">print(dataset2.output_types)  <span class="comment"># ==&gt; "(tf.float32, tf.int32)"</span></span><br><span class="line">print(dataset2.output_shapes)  <span class="comment"># ==&gt; "((), (100,))"</span></span><br><span class="line"></span><br><span class="line">dataset3 = tf.data.Dataset.zip((dataset1, dataset2))</span><br><span class="line">print(dataset3.output_types)  <span class="comment"># ==&gt; (tf.float32, (tf.float32, tf.int32))</span></span><br><span class="line">print(dataset3.output_shapes)  <span class="comment"># ==&gt; "(10, ((), (100,)))"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为元素的每个组件命名通常会带来便利性，例如，如果它们表示训练样本的不同特征。</span></span><br><span class="line">dataset4 = tf.data.Dataset.from_tensor_slices(&#123;<span class="string">"a"</span>: tf.random_uniform([<span class="number">4</span>]),    <span class="string">"b"</span>: tf.random_uniform([<span class="number">4</span>, <span class="number">100</span>], maxval=<span class="number">100</span>, dtype=tf.int32)&#125;)</span><br><span class="line">print(dataset4.output_types)  <span class="comment"># ==&gt; "&#123;'a': tf.float32, 'b': tf.int32&#125;"</span></span><br><span class="line">print(dataset4.output_shapes)  <span class="comment"># ==&gt; "&#123;'a': (), 'b': (100,)&#125;"</span></span><br></pre></td></tr></table></figure>
+<p>和<code>tf.data.Dataset.from_tensors</code>不同在于，这种方法接受tuple和dict作为输入。每一个tensor的第0维的size必须一致。</p>
+<h5 id="tf-data-Dataset-from-generator"><a href="#tf-data-Dataset-from-generator" class="headerlink" title="tf.data.Dataset.from_generator"></a>tf.data.Dataset.from_generator</h5><p>函数签名为<code>def from_generator(generator, output_types, output_shapes=None, args=None) -&gt; Dataset</code><br>代码样例如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gen</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> itertools.count(<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">yield</span> (i, [<span class="number">1</span>]*i)</span><br><span class="line"></span><br><span class="line">ds = tf.data.Dataset.from_generator(gen, (tf.int64, tf.int64), (tf.TensorShape([]), tf.TensorShape([<span class="keyword">None</span>])))</span><br><span class="line">value = ds.make_one_shot_iterator().get_next()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(value)) <span class="comment"># (1, array([1]))</span></span><br><span class="line">    print(sess.run(value)) <span class="comment"># (2, array([1, 1]))</span></span><br></pre></td></tr></table></figure></p>
+<p>详细使用方法见:</p>
+<ul>
+<li><a href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#from_generator" target="_blank" rel="noopener">https://www.tensorflow.org/api_docs/python/tf/data/Dataset#from_generator</a></li>
+</ul>
+<h5 id="tf-data-Dataset-range"><a href="#tf-data-Dataset-range" class="headerlink" title="tf.data.Dataset.range"></a>tf.data.Dataset.range</h5><p>函数签名为<code>def range(*args) -&gt; Dataset</code><br>使用方法和python内置方法<code>range</code>差不多。<br>可参见文档：</p>
+<ul>
+<li><a href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#range" target="_blank" rel="noopener">https://www.tensorflow.org/api_docs/python/tf/data/Dataset#range</a></li>
+</ul>
+<h4 id="应用转换"><a href="#应用转换" class="headerlink" title="应用转换"></a>应用转换</h4><h2 id="tf-data-Iterator"><a href="#tf-data-Iterator" class="headerlink" title="tf.data.Iterator"></a>tf.data.Iterator</h2><p> <code>tf.data.Iterator</code>提供了从 <code>Dataset</code>中提取元素的主要方法。<code>Iterator.get_next()</code> 返回的操作会在执行时生成 <code>Dataset</code> 的下一个元素，并且此操作通常充当输入管道代码和模型之间的接口。</p>
+<h3 id="创建迭代器"><a href="#创建迭代器" class="headerlink" title="创建迭代器"></a>创建迭代器</h3><p>构建了表示输入数据的 <code>Dataset</code> 后，下一步就是创建 <code>Iterator</code> 来访问该数据集中的元素。<a href="https://www.tensorflow.org/api_docs/python/tf/data" target="_blank" rel="noopener"><code>tf.data</code></a> API 目前支持下列迭代器，复杂程度逐渐增大：</p>
+<ul>
+<li>单次</li>
+<li>可初始化</li>
+<li>可重新初始化</li>
+<li>可馈送</li>
+</ul>
+<h4 id="单次"><a href="#单次" class="headerlink" title="单次"></a>单次</h4><p>单次迭代器仅仅对数据集进行一次迭代。不需要显示初始化<br>展示代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dataset = tf.data.Dataset.range(100)</span><br><span class="line">iterator = dataset.make_one_shot_iterator()</span><br><span class="line">next_element = iterator.get_next()for i in range(100):  </span><br><span class="line">    value = sess.run(next_element)  </span><br><span class="line">    assert i == value</span><br></pre></td></tr></table></figure></p>
+<p>单词迭代器虽然只可以迭代一次，但是依旧可以在<code>Dataset</code>上对数据集进行操作，使得可以对数据集进行多轮训练。比如我们想在数据集上进行10轮训练，只需要修改上面的代码为:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dataset = tf.data.Dataset.range(100).repeat(10)</span><br><span class="line">iterator = dataset.make_one_shot_iterator()</span><br><span class="line">next_element = iterator.get_next()for i in range(100):  </span><br><span class="line">    value = sess.run(next_element)  </span><br><span class="line">    assert i == value</span><br></pre></td></tr></table></figure></p>
+<h4 id="可初始化"><a href="#可初始化" class="headerlink" title="可初始化"></a>可初始化</h4><p>您需要先运行显式 <code>iterator.initializer</code> 操作，然后才能使用<strong>可初始化</strong>迭代器。相比单次迭代器，其每初始化一次就可以迭代一次数据。故其相对于<code>单次迭代器</code>如果需要对数据进行多轮训练只能在<code>Dataset</code>上面做手脚不同，<code>可初始化迭代器</code>可以对迭代器进行多次初始化从而进行多次迭代。<br>下面是该迭代器使用方式:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">max_value = tf.placeholder(tf.int64, shape=[])</span><br><span class="line">dataset = tf.data.Dataset.range(max_value)</span><br><span class="line">iterator = dataset.make_initializable_iterator()</span><br><span class="line">next_element = iterator.get_next()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize an iterator over a dataset with 10 elements.</span></span><br><span class="line">sess.run(iterator.initializer, feed_dict=&#123;max_value: <span class="number">10</span>&#125;)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">  value = sess.run(next_element)</span><br><span class="line">  <span class="keyword">assert</span> i == value</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize the same iterator over a dataset with 100 elements.</span></span><br><span class="line">sess.run(iterator.initializer, feed_dict=&#123;max_value: <span class="number">100</span>&#125;)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">  value = sess.run(next_element)</span><br><span class="line">  <span class="keyword">assert</span> i == value</span><br></pre></td></tr></table></figure>
+<h4 id="可重新初始化"><a href="#可重新初始化" class="headerlink" title="可重新初始化"></a>可重新初始化</h4><p><strong>可重新初始化</strong>迭代器可以通过多个不同的 <code>Dataset</code> 对象进行初始化。故而其相对于<strong>可初始化</strong>迭代器，其可以使用一个<code>Dataset</code>进行训练，另外一个<code>Dataset</code>进行验证</p>
+<h4 id="可馈送"><a href="#可馈送" class="headerlink" title="可馈送"></a>可馈送</h4>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/tensorflow-debug/" rel="next" title="tensorflow debug">
+                <i class="fa fa-chevron-left"></i> tensorflow debug
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="stanpcf">
+            
+              <p class="site-author-name" itemprop="name">stanpcf</p>
+              <p class="site-description motion-element" itemprop="description">一枚爱生活的nlp算法喵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/stanpcf" title="GitHub &rarr; https://github.com/stanpcf" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:fpchappy@gmail.com" title="E-Mail &rarr; mailto:fpchappy@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-placeholder"><span class="nav-number">2.</span> <span class="nav-text">tf.placeholder</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-data"><span class="nav-number">3.</span> <span class="nav-text">tf.data</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-data-Dataset"><span class="nav-number">3.1.</span> <span class="nav-text">tf.data.Dataset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据集"><span class="nav-number">3.1.1.</span> <span class="nav-text">创建数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建来源"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">创建来源</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-from-tensors"><span class="nav-number">3.1.1.1.1.</span> <span class="nav-text">tf.data.Dataset.from_tensors</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-from-tensor-slices"><span class="nav-number">3.1.1.1.2.</span> <span class="nav-text">tf.data.Dataset.from_tensor_slices</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-from-generator"><span class="nav-number">3.1.1.1.3.</span> <span class="nav-text">tf.data.Dataset.from_generator</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-range"><span class="nav-number">3.1.1.1.4.</span> <span class="nav-text">tf.data.Dataset.range</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用转换"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">应用转换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-data-Iterator"><span class="nav-number">3.2.</span> <span class="nav-text">tf.data.Iterator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建迭代器"><span class="nav-number">3.2.1.</span> <span class="nav-text">创建迭代器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单次"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">单次</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可初始化"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">可初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可重新初始化"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">可重新初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可馈送"><span class="nav-number">3.2.1.4.</span> <span class="nav-text">可馈送</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stanpcf</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

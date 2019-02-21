@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="tfdbg的目的由于 TensorFlow 的计算图模式，使用通用调试程序（如 Python 的 pdb）很难完成调试。 虽然这种静态图很难调试，但是因为静态计算的机制相比动态计算允许编译器进行更大程度的优化，更符合工业要求(空间、时间上考虑)。 本篇博客记录如何使用Tensorflow内置工具tfdbg进行debug。 tfdbg的介绍tfdbg有两种debug方式进行调试程序。  基于命令行调">
+  <meta name="description" content="tfdbgtfdbg的目的由于 TensorFlow 的计算图模式，使用通用调试程序（如 Python 的 pdb）很难完成调试。 虽然这种静态图很难调试，但是因为静态计算的机制相比动态计算允许编译器进行更大程度的优化，更符合工业要求(空间、时间上考虑)。 本篇博客记录如何使用Tensorflow内置工具tfdbg进行debug。 tfdbg的介绍tfdbg有两种debug方式进行调试程序。  基">
 <meta name="keywords" content="tensorflow,keras">
 <meta property="og:type" content="article">
 <meta property="og:title" content="tensorflow debug">
 <meta property="og:url" content="http://stanpcf.github.io/2019/tensorflow-debug/index.html">
 <meta property="og:site_name" content="StanPcf&#39;s Note">
-<meta property="og:description" content="tfdbg的目的由于 TensorFlow 的计算图模式，使用通用调试程序（如 Python 的 pdb）很难完成调试。 虽然这种静态图很难调试，但是因为静态计算的机制相比动态计算允许编译器进行更大程度的优化，更符合工业要求(空间、时间上考虑)。 本篇博客记录如何使用Tensorflow内置工具tfdbg进行debug。 tfdbg的介绍tfdbg有两种debug方式进行调试程序。  基于命令行调">
+<meta property="og:description" content="tfdbgtfdbg的目的由于 TensorFlow 的计算图模式，使用通用调试程序（如 Python 的 pdb）很难完成调试。 虽然这种静态图很难调试，但是因为静态计算的机制相比动态计算允许编译器进行更大程度的优化，更符合工业要求(空间、时间上考虑)。 本篇博客记录如何使用Tensorflow内置工具tfdbg进行debug。 tfdbg的介绍tfdbg有两种debug方式进行调试程序。  基">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-20T14:49:11.459Z">
+<meta property="og:updated_time" content="2019-02-21T03:38:19.112Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tensorflow debug">
-<meta name="twitter:description" content="tfdbg的目的由于 TensorFlow 的计算图模式，使用通用调试程序（如 Python 的 pdb）很难完成调试。 虽然这种静态图很难调试，但是因为静态计算的机制相比动态计算允许编译器进行更大程度的优化，更符合工业要求(空间、时间上考虑)。 本篇博客记录如何使用Tensorflow内置工具tfdbg进行debug。 tfdbg的介绍tfdbg有两种debug方式进行调试程序。  基于命令行调">
+<meta name="twitter:description" content="tfdbgtfdbg的目的由于 TensorFlow 的计算图模式，使用通用调试程序（如 Python 的 pdb）很难完成调试。 虽然这种静态图很难调试，但是因为静态计算的机制相比动态计算允许编译器进行更大程度的优化，更符合工业要求(空间、时间上考虑)。 本篇博客记录如何使用Tensorflow内置工具tfdbg进行debug。 tfdbg的介绍tfdbg有两种debug方式进行调试程序。  基">
 
 
 
@@ -387,6 +387,22 @@
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-21 11:38:19" itemprop="dateModified" datetime="2019-02-21T11:38:19+08:00">2019-02-21</time>
+              
+            
           </span>
 
           
@@ -443,25 +459,26 @@
       
 
       
-        <h1 id="tfdbg的目的"><a href="#tfdbg的目的" class="headerlink" title="tfdbg的目的"></a>tfdbg的目的</h1><p>由于 TensorFlow 的计算图模式，使用通用调试程序（如 Python 的 <code>pdb</code>）很难完成调试。</p>
+        <h1 id="tfdbg"><a href="#tfdbg" class="headerlink" title="tfdbg"></a>tfdbg</h1><h2 id="tfdbg的目的"><a href="#tfdbg的目的" class="headerlink" title="tfdbg的目的"></a>tfdbg的目的</h2><p>由于 TensorFlow 的计算图模式，使用通用调试程序（如 Python 的 <code>pdb</code>）很难完成调试。</p>
 <p>虽然这种静态图很难调试，但是因为静态计算的机制相比动态计算允许编译器进行更大程度的优化，更符合工业要求(空间、时间上考虑)。</p>
 <p>本篇博客记录如何使用Tensorflow内置工具<code>tfdbg</code>进行debug。</p>
-<h1 id="tfdbg的介绍"><a href="#tfdbg的介绍" class="headerlink" title="tfdbg的介绍"></a>tfdbg的介绍</h1><p><code>tfdbg</code>有两种debug方式进行调试程序。</p>
+<h2 id="tfdbg的介绍"><a href="#tfdbg的介绍" class="headerlink" title="tfdbg的介绍"></a>tfdbg的介绍</h2><p><code>tfdbg</code>有两种debug方式进行调试程序。</p>
 <ul>
 <li>基于命令行调试。类为<code>tf_debug.LocalCLIDebugWrapperSession</code></li>
 <li>图形界面调试，需要借助于<code>Tensorboard</code>。类为<code>tf_debug.TensorBoardDebugWrapperSession</code></li>
 </ul>
 <p>详细的debug指南详见<a href="https://www.tensorflow.org/guide/debugger" target="_blank" rel="noopener">tensorflow debug官方文档</a>。</p>
 <p>使用<code>Tensorboard</code>进行图形界面调试详见<a href="https://github.com/tensorflow/tensorboard/blob/master/tensorboard/plugins/debugger/README.md" target="_blank" rel="noopener">The Debugger Dashboard</a></p>
-<h1 id="张量过滤器编写"><a href="#张量过滤器编写" class="headerlink" title="张量过滤器编写"></a>张量过滤器编写</h1><p>使用tfdbg进行调试的时候，需要对错误进行调试。比如在训练过程中经常出现<code>nan</code>和<code>inf</code>的问题。对于这种错误我们需要进行调试。这个时候我们就需要过滤出出现<code>inf</code>和<code>nan</code>的tensor。因此调试tfdbg的代码工作就是编写这些<strong>张量过滤器</strong></p>
+<h2 id="张量过滤器编写"><a href="#张量过滤器编写" class="headerlink" title="张量过滤器编写"></a>张量过滤器编写</h2><p>使用tfdbg进行调试的时候，需要对错误进行调试。比如在训练过程中经常出现<code>nan</code>和<code>inf</code>的问题。对于这种错误我们需要进行调试。这个时候我们就需要过滤出出现<code>inf</code>和<code>nan</code>的tensor。因此调试tfdbg的代码工作就是编写这些<strong>张量过滤器</strong></p>
 <p>张量过滤器的签名是<code>def function(datum, tensor) -&gt; bool</code></p>
 <p>如下是tensorflow内置的<code>has_inf_or_nan</code>张量过滤器，这个过滤器用来判断tensor是否包含<code>inf</code>和<code>nan</code><br>其源码为<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">has_inf_or_nan</span><span class="params">(datum, tensor)</span>:</span></span><br><span class="line">  <span class="string">"""A predicate for whether a tensor consists of any bad numerical values.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  This predicate is common enough to merit definition in this module.</span></span><br><span class="line"><span class="string">  Bad numerical values include `nan`s and `inf`s.</span></span><br><span class="line"><span class="string">  The signature of this function follows the requirement of the method</span></span><br><span class="line"><span class="string">  `DebugDumpDir.find()`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  Args:</span></span><br><span class="line"><span class="string">    datum: (`DebugTensorDatum`) Datum metadata.</span></span><br><span class="line"><span class="string">    tensor: (`numpy.ndarray` or None) Value of the tensor. None represents</span></span><br><span class="line"><span class="string">      an uninitialized tensor.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  Returns:</span></span><br><span class="line"><span class="string">    (`bool`) True if and only if tensor consists of any nan or inf values.</span></span><br><span class="line"><span class="string">  """</span></span><br><span class="line"></span><br><span class="line">  _ = datum  <span class="comment"># Datum metadata is unused in this predicate.</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> isinstance(tensor, InconvertibleTensorProto):</span><br><span class="line">    <span class="comment"># Uninitialized tensor doesn't have bad numerical values.</span></span><br><span class="line">    <span class="comment"># Also return False for data types that cannot be represented as numpy</span></span><br><span class="line">    <span class="comment"># arrays.</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line">  <span class="keyword">elif</span> (np.issubdtype(tensor.dtype, np.floating) <span class="keyword">or</span></span><br><span class="line">        np.issubdtype(tensor.dtype, np.complex) <span class="keyword">or</span></span><br><span class="line">        np.issubdtype(tensor.dtype, np.integer)):</span><br><span class="line">    <span class="keyword">return</span> np.any(np.isnan(tensor)) <span class="keyword">or</span> np.any(np.isinf(tensor))</span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">False</span></span><br></pre></td></tr></table></figure></p>
 <p>编写完之后需要使用<code>sess.add_tensor_filter</code>注册张量过滤器才可以使用</p>
-<h1 id="使用tfdbg调试keras"><a href="#使用tfdbg调试keras" class="headerlink" title="使用tfdbg调试keras"></a>使用tfdbg调试keras</h1><p>只需要修改非常少的代码，具体介绍及example可见</p>
+<h2 id="使用tfdbg调试keras"><a href="#使用tfdbg调试keras" class="headerlink" title="使用tfdbg调试keras"></a>使用tfdbg调试keras</h2><p>只需要修改非常少的代码，具体介绍及example可见</p>
 <ul>
 <li><a href="https://www.tensorflow.org/guide/debugger#debugging_keras_models_with_tfdbg" target="_blank" rel="noopener">https://www.tensorflow.org/guide/debugger#debugging_keras_models_with_tfdbg</a></li>
 <li><a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/debug/examples/debug_keras.py" target="_blank" rel="noopener">https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/debug/examples/debug_keras.py</a></li>
 </ul>
+<h1 id="tf-debugging"><a href="#tf-debugging" class="headerlink" title="tf.debugging"></a>tf.debugging</h1><p>todo: 需要研究一下怎么样</p>
 <h1 id="输出张量"><a href="#输出张量" class="headerlink" title="输出张量"></a>输出张量</h1><p>这个类似于一般的python程序的<code>print</code>函数，tensorflow实现了<code>tf.print</code>这个函数用于打印张量。使用方式可见<a href="https://www.tensorflow.org/guide/tensors#printing_tensors" target="_blank" rel="noopener">tensorflow输出张量</a>。<br>个人觉得这个东西有点鸡肋，在使用上比较繁琐</p>
 
       
@@ -510,6 +527,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/tensorflow数据输入/" rel="prev" title="tensorflow数据输入">
+                tensorflow数据输入 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -581,7 +602,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -691,7 +712,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#tfdbg的目的"><span class="nav-number">1.</span> <span class="nav-text">tfdbg的目的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tfdbg的介绍"><span class="nav-number">2.</span> <span class="nav-text">tfdbg的介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#张量过滤器编写"><span class="nav-number">3.</span> <span class="nav-text">张量过滤器编写</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用tfdbg调试keras"><span class="nav-number">4.</span> <span class="nav-text">使用tfdbg调试keras</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#输出张量"><span class="nav-number">5.</span> <span class="nav-text">输出张量</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#tfdbg"><span class="nav-number">1.</span> <span class="nav-text">tfdbg</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tfdbg的目的"><span class="nav-number">1.1.</span> <span class="nav-text">tfdbg的目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tfdbg的介绍"><span class="nav-number">1.2.</span> <span class="nav-text">tfdbg的介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#张量过滤器编写"><span class="nav-number">1.3.</span> <span class="nav-text">张量过滤器编写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用tfdbg调试keras"><span class="nav-number">1.4.</span> <span class="nav-text">使用tfdbg调试keras</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-debugging"><span class="nav-number">2.</span> <span class="nav-text">tf.debugging</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#输出张量"><span class="nav-number">3.</span> <span class="nav-text">输出张量</span></a></li></ol></div>
             
 
           </div>

@@ -99,14 +99,14 @@
   <meta name="description" content="该篇博客主要记录一些tensorflow api理解 tf.global_variables_initializer表面上通常我们可以在一些tensorflow程序中看到有类似这样的一句代码sess.run(tf.global_variables_initializer())那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如">
 <meta name="keywords" content="tensorflow">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tensorflow api总结">
+<meta property="og:title" content="tf.global_variables_initializer">
 <meta property="og:url" content="http://stanpcf.github.io/2019/tensorflow-api总结/index.html">
 <meta property="og:site_name" content="StanPcf&#39;s Note">
 <meta property="og:description" content="该篇博客主要记录一些tensorflow api理解 tf.global_variables_initializer表面上通常我们可以在一些tensorflow程序中看到有类似这样的一句代码sess.run(tf.global_variables_initializer())那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-19T14:41:14.000Z">
+<meta property="og:updated_time" content="2019-02-25T06:05:27.146Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tensorflow api总结">
+<meta name="twitter:title" content="tf.global_variables_initializer">
 <meta name="twitter:description" content="该篇博客主要记录一些tensorflow api理解 tf.global_variables_initializer表面上通常我们可以在一些tensorflow程序中看到有类似这样的一句代码sess.run(tf.global_variables_initializer())那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如">
 
 
@@ -124,7 +124,7 @@
   };
 </script>
 
-  <title>tensorflow api总结 | StanPcf's Note</title>
+  <title>tf.global_variables_initializer | StanPcf's Note</title>
   
 
 
@@ -357,7 +357,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">tensorflow api总结
+          <h1 class="post-title" itemprop="name headline">tf.global_variables_initializer
 
               
             
@@ -383,12 +383,24 @@
                 
               
 
-              <time title="Created: 2019-02-19 22:35:55 / Modified: 22:41:14" itemprop="dateCreated datePublished" datetime="2019-02-19T22:35:55+08:00">2019-02-19</time>
+              <time title="Created: 2019-02-19 22:35:55" itemprop="dateCreated datePublished" datetime="2019-02-19T22:35:55+08:00">2019-02-19</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-25 14:05:27" itemprop="dateModified" datetime="2019-02-25T14:05:27+08:00">2019-02-25</time>
               
             
           </span>
@@ -406,6 +418,13 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tensorflow/" itemprop="url" rel="index"><span itemprop="name">tensorflow</span></a></span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tensorflow/api/" itemprop="url" rel="index"><span itemprop="name">api</span></a></span>
 
                 
                 
@@ -604,7 +623,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>

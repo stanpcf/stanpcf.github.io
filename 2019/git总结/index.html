@@ -104,13 +104,13 @@
 <meta property="og:site_name" content="StanPcf&#39;s Note">
 <meta property="og:description" content="fork的仓库合并代码merge的三种方式在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种) 普通的merge这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。下图就是这种merge带来的繁琐gr">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://stanpcf.github.io/2019/git总结/git.resources/CB0264F0-567B-4B64-BC45-15999D643B70.png">
-<meta property="og:image" content="http://stanpcf.github.io/2019/git总结/git.resources/2EE1E542-6352-4CB0-A8AD-0B5794C6E476.png">
-<meta property="og:updated_time" content="2019-02-19T14:41:16.000Z">
+<meta property="og:image" content="http://stanpcf.github.io/2019/git总结/normal_merge.png">
+<meta property="og:image" content="http://stanpcf.github.io/2019/git总结/rebase_merge.png">
+<meta property="og:updated_time" content="2019-02-25T16:17:56.013Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git总结">
 <meta name="twitter:description" content="fork的仓库合并代码merge的三种方式在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种) 普通的merge这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。下图就是这种merge带来的繁琐gr">
-<meta name="twitter:image" content="http://stanpcf.github.io/2019/git总结/git.resources/CB0264F0-567B-4B64-BC45-15999D643B70.png">
+<meta name="twitter:image" content="http://stanpcf.github.io/2019/git总结/normal_merge.png">
 
 
 
@@ -403,7 +403,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-19 22:41:16" itemprop="dateModified" datetime="2019-02-19T22:41:16+08:00">2019-02-19</time>
+                <time title="Modified: 2019-02-26 00:17:56" itemprop="dateModified" datetime="2019-02-26T00:17:56+08:00">2019-02-26</time>
               
             
           </span>
@@ -456,9 +456,9 @@
 
       
         <h3 id="fork的仓库合并代码"><a href="#fork的仓库合并代码" class="headerlink" title="fork的仓库合并代码"></a>fork的仓库合并代码</h3><h4 id="merge的三种方式"><a href="#merge的三种方式" class="headerlink" title="merge的三种方式"></a>merge的三种方式</h4><p>在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种)</p>
-<h5 id="普通的merge"><a href="#普通的merge" class="headerlink" title="普通的merge"></a>普通的merge</h5><p>这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。<br>这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。<br>下图就是这种merge带来的繁琐graph<br><img src="/2019/git总结/git.resources/CB0264F0-567B-4B64-BC45-15999D643B70.png" alt="9c17413e518f29d44ddde6c8410030d1"></p>
+<h5 id="普通的merge"><a href="#普通的merge" class="headerlink" title="普通的merge"></a>普通的merge</h5><p>这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。<br>这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的commit都保留下来,比如说两个分支的merge信息也会保留下来。<br>下图就是这种merge带来的繁琐graph<br><img src="/2019/git总结/normal_merge.png" alt="normal_merge"></p>
 <h5 id="squash-merge-推荐"><a href="#squash-merge-推荐" class="headerlink" title="squash merge (推荐)"></a>squash merge (推荐)</h5><p>squash merge 是github上常用的merge方式。通常一个pr会有多个commit, 有些commit是对上一个commit的调整(比如说上一个commit的代码不符合pep8, 然后这个commit对上一个commit进行modify)。我们按照普通的merge进行merge的话,回报这些繁琐的信息保留下来, 这是不好的。这个时候我们需要将这个pr的多个commit合并为一个commit, 并选择一些信息作为最终commit的信息。这个时候就需要squash merge了</p>
-<h5 id="rebase-merge-推荐"><a href="#rebase-merge-推荐" class="headerlink" title="rebase merge (推荐)"></a>rebase merge (推荐)</h5><p>普通merge会保留许多合并点, 但是我们并不想看到这些点, 而是只想看到一条线的提交记录。<br>比如下图这样的<br><img src="/2019/git总结/git.resources/2EE1E542-6352-4CB0-A8AD-0B5794C6E476.png" alt="8a5a035b72aa04056c94fead78d29285"></p>
+<h5 id="rebase-merge-推荐"><a href="#rebase-merge-推荐" class="headerlink" title="rebase merge (推荐)"></a>rebase merge (推荐)</h5><p>普通merge会保留许多合并点, 但是我们并不想看到这些点, 而是只想看到一条线的提交记录。<br>比如下图这样的<br><img src="/2019/git总结/rebase_merge.png" alt="rebase_merge"></p>
 <p>这个时候我们可以使用rebase merge。他会使用rebase将commit合并为一条线, 这样可以保证相对来说比较简洁</p>
 <p>比较好的博客<br><a href="https://www.jianshu.com/p/684a8ae9dcf1" target="_blank" rel="noopener">merge的三种合并方式</a><br><a href="https://www.cnblogs.com/pinefantasy/articles/6287147.html" target="_blank" rel="noopener">git rebase详解</a><br><a href="http://gitbook.liuhui998.com/4_2.html" target="_blank" rel="noopener">git rebase</a><br><a href="https://blog.csdn.net/coder1994/article/details/80639404" target="_blank" rel="noopener">squash merge</a></p>
 <h4 id="删除远程分支后-branch-a-还是能看到的解决办法"><a href="#删除远程分支后-branch-a-还是能看到的解决办法" class="headerlink" title="删除远程分支后, branch -a 还是能看到的解决办法"></a>删除远程分支后, <code>branch -a</code> 还是能看到的解决办法</h4><p>问题的重现:<br>假设现在有个仓库<code>owner/one_project</code>, 然后我clone一个到我的github上<code>my/one_project</code>。现在我在本地新建一个分支dev_fixbug并修改代码、add、commit、push到<code>my/one_project</code>。然后我们建立一个pr将dev_fixbug提交给<code>owner/one_project</code>。 owner在rebase merge了我们的代码后, 我们可以将这个dev_fixbug在github上直接delete掉, 或者本地执行<code>git push origin --delete dev_fixbug</code>。这个分支在远程remote上确实被删掉了。但是我们本地依然还会保留着<code>remotes/origin/dev_fixbug</code>(使用<code>git branch -a</code>即可查看)<br>解决办法是:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git remote show origin // 查看远程分支, 既可以查看到删除分支的情况</span><br><span class="line">$ git remote prune origin // 删除了本地的remotes/origin/dev_fixbug</span><br></pre></td></tr></table></figure></p>

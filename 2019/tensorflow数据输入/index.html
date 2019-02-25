@@ -96,18 +96,17 @@
 
 
 
-  <meta name="description" content="简介本篇博客讲解tensorflow如何将数据灌进模型进行训练 tensorflow有两种将数据灌进tensorflow计算图的方法  使用tf.placeholder 使用tf.Data  tf.placeholder占位符适用于简单的实验参考:   https://www.tensorflow.org/guide/low_level_intro#feeding  tf.datatf.data模">
-<meta name="keywords" content="tensorflow">
+  <meta name="description" content="title: tensorflow数据输入tags:  tensorflowcategories: tensorflowdate: 2019-02-21 23:07:14   简介本篇博客讲解tensorflow如何将数据灌进模型进行训练 tensorflow有两种将数据灌进tensorflow计算图的方法  使用tf.placeholder 使用tf.Data  tf.placeholder占">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tensorflow数据输入">
+<meta property="og:title" content="StanPcf&#39;s Note">
 <meta property="og:url" content="http://stanpcf.github.io/2019/tensorflow数据输入/index.html">
 <meta property="og:site_name" content="StanPcf&#39;s Note">
-<meta property="og:description" content="简介本篇博客讲解tensorflow如何将数据灌进模型进行训练 tensorflow有两种将数据灌进tensorflow计算图的方法  使用tf.placeholder 使用tf.Data  tf.placeholder占位符适用于简单的实验参考:   https://www.tensorflow.org/guide/low_level_intro#feeding  tf.datatf.data模">
+<meta property="og:description" content="title: tensorflow数据输入tags:  tensorflowcategories: tensorflowdate: 2019-02-21 23:07:14   简介本篇博客讲解tensorflow如何将数据灌进模型进行训练 tensorflow有两种将数据灌进tensorflow计算图的方法  使用tf.placeholder 使用tf.Data  tf.placeholder占">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-25T06:42:48.352Z">
+<meta property="og:updated_time" content="2019-02-25T16:17:04.684Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tensorflow数据输入">
-<meta name="twitter:description" content="简介本篇博客讲解tensorflow如何将数据灌进模型进行训练 tensorflow有两种将数据灌进tensorflow计算图的方法  使用tf.placeholder 使用tf.Data  tf.placeholder占位符适用于简单的实验参考:   https://www.tensorflow.org/guide/low_level_intro#feeding  tf.datatf.data模">
+<meta name="twitter:title" content="StanPcf&#39;s Note">
+<meta name="twitter:description" content="title: tensorflow数据输入tags:  tensorflowcategories: tensorflowdate: 2019-02-21 23:07:14   简介本篇博客讲解tensorflow如何将数据灌进模型进行训练 tensorflow有两种将数据灌进tensorflow计算图的方法  使用tf.placeholder 使用tf.Data  tf.placeholder占">
 
 
 
@@ -124,7 +123,7 @@
   };
 </script>
 
-  <title>tensorflow数据输入 | StanPcf's Note</title>
+  <title> | StanPcf's Note</title>
   
 
 
@@ -357,7 +356,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">tensorflow数据输入
+          <h1 class="post-title" itemprop="name headline">
 
               
             
@@ -400,29 +399,11 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-25 14:42:48" itemprop="dateModified" datetime="2019-02-25T14:42:48+08:00">2019-02-25</time>
+                <time title="Modified: 2019-02-26 00:17:04" itemprop="dateModified" datetime="2019-02-26T00:17:04+08:00">2019-02-26</time>
               
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tensorflow/" itemprop="url" rel="index"><span itemprop="name">tensorflow</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -452,7 +433,14 @@
       
 
       
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>本篇博客讲解tensorflow如何将数据灌进模型进行训练</p>
+        <hr>
+<p>title: tensorflow数据输入<br>tags:</p>
+<ul>
+<li>tensorflow<br>categories:</li>
+<li>tensorflow<br>date: 2019-02-21 23:07:14</li>
+</ul>
+<hr>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>本篇博客讲解tensorflow如何将数据灌进模型进行训练</p>
 <p>tensorflow有两种将数据灌进tensorflow计算图的方法</p>
 <ol>
 <li>使用<code>tf.placeholder</code></li>
@@ -527,7 +515,34 @@
 <li>CSV数据<br>详情可以看 <a href="https://www.tensorflow.org/guide/datasets#reading_input_data" target="_blank" rel="noopener">https://www.tensorflow.org/guide/datasets#reading_input_data</a></li>
 </ul>
 <h2 id="tf-data-Dataset-map-预处理数据"><a href="#tf-data-Dataset-map-预处理数据" class="headerlink" title="tf.data.Dataset.map()预处理数据"></a>tf.data.Dataset.map()预处理数据</h2><p><code>tf.data.Dataset.map(f)</code>转换通过将指定函数 <code>f</code> 应用于输入数据集的每个元素来生成新数据集。同时因为tensorflow使用静态图的缘故，很难使用外部python库去处理一些逻辑，但是在解析数据的时候，调用外部python库很有用，tensorflow通过提供<code>tf.py_func()</code>来将外部库的逻辑纳入tensorflow处理数据里面<br>这块可以参考: <a href="https://www.tensorflow.org/guide/datasets#preprocessing_data_with_datasetmap" target="_blank" rel="noopener">https://www.tensorflow.org/guide/datasets#preprocessing_data_with_datasetmap</a></p>
-
+<h2 id="批处理处理数据"><a href="#批处理处理数据" class="headerlink" title="批处理处理数据"></a>批处理处理数据</h2><p><code>tf.data.Dataset</code>提供了两个方法来进行batch训练:</p>
+<ul>
+<li><code>Dataset.batch</code>，简单的批处理。适用于每条数据的张量形状一样</li>
+<li><code>Dataset.padded_batch</code>，适用于自然语言处理的seq类型的每个样本数据长度不一的数据。</li>
+</ul>
+<p>详细的两个方法的使用可以参考: <a href="https://www.tensorflow.org/guide/datasets#batching_dataset_elements" target="_blank" rel="noopener">https://www.tensorflow.org/guide/datasets#batching_dataset_elements</a></p>
+<h2 id="训练工作流程"><a href="#训练工作流程" class="headerlink" title="训练工作流程"></a>训练工作流程</h2><p>资料 <a href="https://www.tensorflow.org/guide/datasets#training_workflows" target="_blank" rel="noopener">https://www.tensorflow.org/guide/datasets#training_workflows</a> 简要的讲解了<code>tf.data</code>如何将数据灌入模型</p>
+<h2 id="api"><a href="#api" class="headerlink" title="api"></a>api</h2><p>这部分讲解一些<code>Dataset</code>类的方法的简介说明</p>
+<h3 id="zip-datasets"><a href="#zip-datasets" class="headerlink" title="zip(datasets)"></a>zip(datasets)</h3><p>静态方法。类似于python内置函数zip。转换多个数据集为一个多输入数据集</p>
+<h3 id="concatenate-self-dataset"><a href="#concatenate-self-dataset" class="headerlink" title="concatenate(self, dataset)"></a>concatenate(self, dataset)</h3><p>拼接两个dataset为一个更大的数据集</p>
+<h3 id="prefetch-self-buffer-size"><a href="#prefetch-self-buffer-size" class="headerlink" title="prefetch(self, buffer_size)"></a>prefetch(self, buffer_size)</h3><h3 id="list-files-file-pattern-shuffle-None-seed-None"><a href="#list-files-file-pattern-shuffle-None-seed-None" class="headerlink" title="list_files(file_pattern, shuffle=None, seed=None)"></a>list_files(file_pattern, shuffle=None, seed=None)</h3><p>静态方法。列出有哪些文件</p>
+<h3 id="repeat-self-count-None"><a href="#repeat-self-count-None" class="headerlink" title="repeat(self, count=None)"></a>repeat(self, count=None)</h3><p>重复数据集一定次数。count也叫epoch</p>
+<h3 id="shuffle-self-buffer-size-seed-None-reshuffle-each-iteration-None"><a href="#shuffle-self-buffer-size-seed-None-reshuffle-each-iteration-None" class="headerlink" title="shuffle(self, buffer_size, seed=None, reshuffle_each_iteration=None)"></a>shuffle(self, buffer_size, seed=None, reshuffle_each_iteration=None)</h3><h3 id="cache-self-filename-””"><a href="#cache-self-filename-””" class="headerlink" title="cache(self, filename=””)"></a>cache(self, filename=””)</h3><p>cache数据集</p>
+<h3 id="take-self-count"><a href="#take-self-count" class="headerlink" title="take(self, count)"></a>take(self, count)</h3><p>取出数据集里面的前<code>count</code>个数据。如果count是-1或者它大于数据集本身的大小就取出所有数据<br>使用方法如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">dataset = tf.data.Dataset.range(<span class="number">10</span>).take(<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">iterator = dataset.make_one_shot_iterator()</span><br><span class="line">next_ele = iterator.get_next()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            print(sess.run(next_ele))</span><br><span class="line">        <span class="keyword">except</span> tf.errors.OutOfRangeError:</span><br><span class="line">            print(<span class="string">'iterator over'</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p>输出为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">iterator over</span><br></pre></td></tr></table></figure>
+<h3 id="skip-self-count"><a href="#skip-self-count" class="headerlink" title="skip(self, count)"></a>skip(self, count)</h3><p>将前count个数据舍弃。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">dataset = tf.data.Dataset.range(<span class="number">10</span>).take(<span class="number">4</span>).skip(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">iterator = dataset.make_one_shot_iterator()</span><br><span class="line">next_ele = iterator.get_next()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            print(sess.run(next_ele))</span><br><span class="line">        <span class="keyword">except</span> tf.errors.OutOfRangeError:</span><br><span class="line">            print(<span class="string">'iterator over'</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure></p>
+<p>输出为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">iterator over</span><br></pre></td></tr></table></figure>
+<h3 id="shard-self-num-shards-index"><a href="#shard-self-num-shards-index" class="headerlink" title="shard(self, num_shards, index)"></a>shard(self, num_shards, index)</h3><p>这个方法在分布式训练里面特别有用。作用是将数据分成num_shards份分布在不同机器上训练。详细使用可以看官方文档 <a href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#shard" target="_blank" rel="noopener">https://www.tensorflow.org/api_docs/python/tf/data/Dataset#shard</a> </p>
+<h3 id="flat-map-self-map-func"><a href="#flat-map-self-map-func" class="headerlink" title="flat_map(self, map_func)"></a>flat_map(self, map_func)</h3><p>将数据集里面的每个元素展平然后拼接。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># <span class="doctag">NOTE:</span> The following examples use `&#123; ... &#125;` to represent the</span></span><br><span class="line"><span class="comment"># contents of a dataset. '[...]' represents a tensor.</span></span><br><span class="line">a = &#123;[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>], [<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>], [<span class="number">10</span>]&#125;</span><br><span class="line"></span><br><span class="line">a.flat_map(<span class="keyword">lambda</span> x: Dataset.from_tensor_slices(x)) == &#123;[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="filter-self-predicate"><a href="#filter-self-predicate" class="headerlink" title="filter(self, predicate)"></a>filter(self, predicate)</h3><p>可以参考 <a href="https://github.com/tensorflow/nmt/blob/0be864257a76c151eef20ea689755f08bc1faf4e/nmt/utils/iterator_utils.py#L141" target="_blank" rel="noopener">机器翻译数据集用filter过滤掉src或tgt数据里面长度为0的坏数据</a></p>
+<h3 id="apply-self-transformation-func"><a href="#apply-self-transformation-func" class="headerlink" title="apply(self, transformation_func)"></a>apply(self, transformation_func)</h3><p><a href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#apply" target="_blank" rel="noopener">https://www.tensorflow.org/api_docs/python/tf/data/Dataset#apply</a></p>
+<h3 id="window-self-size-shift-None-stride-1-drop-remainder-False"><a href="#window-self-size-shift-None-stride-1-drop-remainder-False" class="headerlink" title="window(self, size, shift=None, stride=1, drop_remainder=False)"></a>window(self, size, shift=None, stride=1, drop_remainder=False)</h3><p><code>tf.data.Dataset.range(7).window(2)</code> 产生 <code>[{0, 1}, {2, 3}, {4, 5}, {6}]</code>这样的数据。详情看官方文档</p>
+<h3 id="reduce-self-initial-state-reduce-func"><a href="#reduce-self-initial-state-reduce-func" class="headerlink" title="reduce(self, initial_state, reduce_func)"></a>reduce(self, initial_state, reduce_func)</h3><p>该函数返回一个tensor，而不是一个<code>Dataset</code>类<br>使用如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">t = tf.data.Dataset.range(<span class="number">5</span>).reduce(np.int64(<span class="number">0</span>), <span class="keyword">lambda</span> x, y: x + y)</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(t))   <span class="comment"># 10</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="with-options-self-options"><a href="#with-options-self-options" class="headerlink" title="with_options(self, options)"></a>with_options(self, options)</h3>
       
     </div>
 
@@ -547,12 +562,6 @@
     
 
     <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
-          
-        </div>
       
 
       
@@ -759,7 +768,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-placeholder"><span class="nav-number">2.</span> <span class="nav-text">tf.placeholder</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-data"><span class="nav-number">3.</span> <span class="nav-text">tf.data</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-data-Dataset"><span class="nav-number">3.1.</span> <span class="nav-text">tf.data.Dataset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据集"><span class="nav-number">3.1.1.</span> <span class="nav-text">创建数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建来源"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">创建来源</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-from-tensors"><span class="nav-number">3.1.1.1.1.</span> <span class="nav-text">tf.data.Dataset.from_tensors</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-from-tensor-slices"><span class="nav-number">3.1.1.1.2.</span> <span class="nav-text">tf.data.Dataset.from_tensor_slices</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-from-generator"><span class="nav-number">3.1.1.1.3.</span> <span class="nav-text">tf.data.Dataset.from_generator</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-range"><span class="nav-number">3.1.1.1.4.</span> <span class="nav-text">tf.data.Dataset.range</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用转换"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">应用转换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-data-Iterator"><span class="nav-number">3.2.</span> <span class="nav-text">tf.data.Iterator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建迭代器"><span class="nav-number">3.2.1.</span> <span class="nav-text">创建迭代器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单次"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">单次</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可初始化"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">可初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可重新初始化"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">可重新初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可馈送"><span class="nav-number">3.2.1.4.</span> <span class="nav-text">可馈送</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保存迭代器状态"><span class="nav-number">3.3.</span> <span class="nav-text">保存迭代器状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读取数据"><span class="nav-number">3.4.</span> <span class="nav-text">读取数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-data-Dataset-map-预处理数据"><span class="nav-number">3.5.</span> <span class="nav-text">tf.data.Dataset.map()预处理数据</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-placeholder"><span class="nav-number">2.</span> <span class="nav-text">tf.placeholder</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-data"><span class="nav-number">3.</span> <span class="nav-text">tf.data</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-data-Dataset"><span class="nav-number">3.1.</span> <span class="nav-text">tf.data.Dataset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据集"><span class="nav-number">3.1.1.</span> <span class="nav-text">创建数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建来源"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">创建来源</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-from-tensors"><span class="nav-number">3.1.1.1.1.</span> <span class="nav-text">tf.data.Dataset.from_tensors</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-from-tensor-slices"><span class="nav-number">3.1.1.1.2.</span> <span class="nav-text">tf.data.Dataset.from_tensor_slices</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-from-generator"><span class="nav-number">3.1.1.1.3.</span> <span class="nav-text">tf.data.Dataset.from_generator</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tf-data-Dataset-range"><span class="nav-number">3.1.1.1.4.</span> <span class="nav-text">tf.data.Dataset.range</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用转换"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">应用转换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-data-Iterator"><span class="nav-number">3.2.</span> <span class="nav-text">tf.data.Iterator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建迭代器"><span class="nav-number">3.2.1.</span> <span class="nav-text">创建迭代器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单次"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">单次</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可初始化"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">可初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可重新初始化"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">可重新初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可馈送"><span class="nav-number">3.2.1.4.</span> <span class="nav-text">可馈送</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保存迭代器状态"><span class="nav-number">3.3.</span> <span class="nav-text">保存迭代器状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读取数据"><span class="nav-number">3.4.</span> <span class="nav-text">读取数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-data-Dataset-map-预处理数据"><span class="nav-number">3.5.</span> <span class="nav-text">tf.data.Dataset.map()预处理数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#批处理处理数据"><span class="nav-number">3.6.</span> <span class="nav-text">批处理处理数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#训练工作流程"><span class="nav-number">3.7.</span> <span class="nav-text">训练工作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#api"><span class="nav-number">3.8.</span> <span class="nav-text">api</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#zip-datasets"><span class="nav-number">3.8.1.</span> <span class="nav-text">zip(datasets)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#concatenate-self-dataset"><span class="nav-number">3.8.2.</span> <span class="nav-text">concatenate(self, dataset)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#prefetch-self-buffer-size"><span class="nav-number">3.8.3.</span> <span class="nav-text">prefetch(self, buffer_size)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#list-files-file-pattern-shuffle-None-seed-None"><span class="nav-number">3.8.4.</span> <span class="nav-text">list_files(file_pattern, shuffle=None, seed=None)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#repeat-self-count-None"><span class="nav-number">3.8.5.</span> <span class="nav-text">repeat(self, count=None)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shuffle-self-buffer-size-seed-None-reshuffle-each-iteration-None"><span class="nav-number">3.8.6.</span> <span class="nav-text">shuffle(self, buffer_size, seed=None, reshuffle_each_iteration=None)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cache-self-filename-””"><span class="nav-number">3.8.7.</span> <span class="nav-text">cache(self, filename=””)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#take-self-count"><span class="nav-number">3.8.8.</span> <span class="nav-text">take(self, count)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#skip-self-count"><span class="nav-number">3.8.9.</span> <span class="nav-text">skip(self, count)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shard-self-num-shards-index"><span class="nav-number">3.8.10.</span> <span class="nav-text">shard(self, num_shards, index)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flat-map-self-map-func"><span class="nav-number">3.8.11.</span> <span class="nav-text">flat_map(self, map_func)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter-self-predicate"><span class="nav-number">3.8.12.</span> <span class="nav-text">filter(self, predicate)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apply-self-transformation-func"><span class="nav-number">3.8.13.</span> <span class="nav-text">apply(self, transformation_func)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#window-self-size-shift-None-stride-1-drop-remainder-False"><span class="nav-number">3.8.14.</span> <span class="nav-text">window(self, size, shift=None, stride=1, drop_remainder=False)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reduce-self-initial-state-reduce-func"><span class="nav-number">3.8.15.</span> <span class="nav-text">reduce(self, initial_state, reduce_func)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#with-options-self-options"><span class="nav-number">3.8.16.</span> <span class="nav-text">with_options(self, options)</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

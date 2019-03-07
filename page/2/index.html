@@ -96,25 +96,23 @@
 
 
 
-  <meta name="description" content="该篇博客主要记录一些tensorflow api理解 tf.global_variables_initializer表面上通常我们可以在一些tensorflow程序中看到有类似这样的一句代码sess.run(tf.global_variables_initializer())那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如">
-<meta name="keywords" content="tensorflow">
-<meta property="og:type" content="article">
-<meta property="og:title" content="tf.global_variables_initializer">
-<meta property="og:url" content="http://stanpcf.github.io/2019/tf-global-variables-initializer/index.html">
+  <meta name="description" content="一枚爱生活的nlp算法喵">
+<meta property="og:type" content="website">
+<meta property="og:title" content="StanPcf&#39;s Note">
+<meta property="og:url" content="http://stanpcf.github.io/page/2/index.html">
 <meta property="og:site_name" content="StanPcf&#39;s Note">
-<meta property="og:description" content="该篇博客主要记录一些tensorflow api理解 tf.global_variables_initializer表面上通常我们可以在一些tensorflow程序中看到有类似这样的一句代码sess.run(tf.global_variables_initializer())那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如">
+<meta property="og:description" content="一枚爱生活的nlp算法喵">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-25T15:38:38.683Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tf.global_variables_initializer">
-<meta name="twitter:description" content="该篇博客主要记录一些tensorflow api理解 tf.global_variables_initializer表面上通常我们可以在一些tensorflow程序中看到有类似这样的一句代码sess.run(tf.global_variables_initializer())那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如">
+<meta name="twitter:title" content="StanPcf&#39;s Note">
+<meta name="twitter:description" content="一枚爱生活的nlp算法喵">
 
 
 
 
 
 
-  <link rel="canonical" href="http://stanpcf.github.io/2019/tf-global-variables-initializer/">
+  <link rel="canonical" href="http://stanpcf.github.io/page/2/">
 
 
 
@@ -124,7 +122,7 @@
   };
 </script>
 
-  <title>tf.global_variables_initializer | StanPcf's Note</title>
+  <title>StanPcf's Note</title>
   
 
 
@@ -172,7 +170,8 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -323,9 +322,9 @@
           
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
 
@@ -340,7 +339,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stanpcf.github.io/2019/tf-global-variables-initializer/">
+    <link itemprop="mainEntityOfPage" href="http://stanpcf.github.io/2019/git总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stanpcf">
@@ -357,8 +356,10 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">tf.global_variables_initializer
-
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/git总结/" class="post-title-link" itemprop="url">git总结</a>
               
             
           </h1>
@@ -383,7 +384,7 @@
                 
               
 
-              <time title="Created: 2019-02-19 22:35:55" itemprop="dateCreated datePublished" datetime="2019-02-19T22:35:55+08:00">2019-02-19</time>
+              <time title="Created: 2019-02-17 15:10:04" itemprop="dateCreated datePublished" datetime="2019-02-17T15:10:04+08:00">2019-02-17</time>
             
 
             
@@ -400,7 +401,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-25 23:38:38" itemprop="dateModified" datetime="2019-02-25T23:38:38+08:00">2019-02-25</time>
+                <time title="Modified: 2019-02-26 00:17:56" itemprop="dateModified" datetime="2019-02-26T00:17:56+08:00">2019-02-26</time>
               
             
           </span>
@@ -417,14 +418,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tensorflow/" itemprop="url" rel="index"><span itemprop="name">tensorflow</span></a></span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tensorflow/api/" itemprop="url" rel="index"><span itemprop="name">api</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a></span>
 
                 
                 
@@ -459,26 +453,23 @@
       
 
       
-        <p>该篇博客主要记录一些tensorflow api理解</p>
-<h2 id="tf-global-variables-initializer"><a href="#tf-global-variables-initializer" class="headerlink" title="tf.global_variables_initializer"></a>tf.global_variables_initializer</h2><h3 id="表面上"><a href="#表面上" class="headerlink" title="表面上"></a>表面上</h3><p>通常我们可以在一些tensorflow程序中看到有类似这样的一句代码<code>sess.run(tf.global_variables_initializer())</code><br>那么为什么会有这么一句呢。那是因为变量必须先初始化之后才可以使用。这也意味着如果你的程序没有变量的话就可以不用写这句代码。如下代码:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">tensor = tf.range(<span class="number">10</span>)</span><br><span class="line">out = tf.add(tensor, tensor)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(out.eval())</span><br></pre></td></tr></table></figure>
-<p>上面代码将会打印如下输出:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ 0  2  4  6  8 10 12 14 16 18]</span><br></pre></td></tr></table></figure></p>
-<p>因为上面的代码没有变量(准确说只要没有global_variables就行)，所以我们不用写这一句。</p>
-<h3 id="变量类型"><a href="#变量类型" class="headerlink" title="变量类型"></a>变量类型</h3><p>默认情况下，每个变量<code>tf.Variable</code>放置在两个集合中。</p>
-<ul>
-<li><a href="https://www.tensorflow.org/api_docs/python/tf/GraphKeys#GLOBAL_VARIABLES" target="_blank" rel="noopener"><code>tf.GraphKeys.GLOBAL_VARIABLES</code></a> - 可以在多台设备间共享的变量，</li>
-<li><a href="https://www.tensorflow.org/api_docs/python/tf/GraphKeys#TRAINABLE_VARIABLES" target="_blank" rel="noopener"><code>tf.GraphKeys.TRAINABLE_VARIABLES</code></a> - TensorFlow 将计算其梯度的变量。</li>
-</ul>
-<p>还有如果你希望你的变量不被训练，可以添加到 <a href="https://www.tensorflow.org/api_docs/python/tf/GraphKeys#LOCAL_VARIABLES" target="_blank" rel="noopener"><code>tf.GraphKeys.LOCAL_VARIABLES</code></a>。例如，以下代码段展示了如何将名为 <code>my_local</code> 的变量添加到此集合中：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_local = tf.get_variable(<span class="string">"my_local"</span>, shape=(),collections=[tf.GraphKeys.LOCAL_VARIABLES])</span><br></pre></td></tr></table></figure>
-<p>或者，您可以指定 <code>trainable=False</code>（作为 <a href="https://www.tensorflow.org/api_docs/python/tf/get_variable" target="_blank" rel="noopener"><code>tf.get_variable</code></a> 的参数）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">my_non_trainable = tf.get_variable(<span class="string">"my_non_trainable"</span>, shape=(), trainable=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="实际上"><a href="#实际上" class="headerlink" title="实际上"></a>实际上</h3><p>由上面其实我们就可以看出，<code>tf.global_variables_initializer()</code>实际上是在初始化<code>tf.GraphKeys.GLOBAL_VARIABLES</code>集合中的所有变量.</p>
-<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><p>默认情况下，<a href="https://www.tensorflow.org/api_docs/python/tf/global_variables_initializer" target="_blank" rel="noopener"><code>tf.global_variables_initializer</code></a> 不会指定变量的初始化顺序。因此，如果变量的初始值取决于另一变量的值，那么很有可能会出现错误。任何时候，如果您在并非所有变量都已初始化的上下文中使用某个变量值（例如在初始化某个变量时使用另一变量的值），最好使用 <code>variable.initialized_value()</code>，而非 <code>variable</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v = tf.get_variable(&quot;v&quot;, shape=(), initializer=tf.zeros_initializer())</span><br><span class="line">w = tf.get_variable(&quot;w&quot;, initializer=v.initialized_value() + 1)</span><br></pre></td></tr></table></figure></p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
-<li><a href="https://www.tensorflow.org/guide/variables#initializing_variables" target="_blank" rel="noopener">https://www.tensorflow.org/guide/variables#initializing_variables</a></li>
-</ul>
-<h2 id="tf-control-dependencies"><a href="#tf-control-dependencies" class="headerlink" title="tf.control_dependencies"></a>tf.control_dependencies</h2>
+        
+          
+            <p>
+              fork的仓库合并代码merge的三种方式在git中分支merge通常有三种方式(在github上提交pr给原作者, 合并的方式也是这三种)
+普通的merge这是入门级别的merge方式。基本只要了解这种方式就会知道该命令。这种方式会保留所有的信息, 在稍微大点的项目中就不行了。因为他会把所有的co
+              ...
+            </p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/git总结/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
       
     </div>
 
@@ -499,40 +490,14 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
-          
-        </div>
+
+      
+
       
 
       
       
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/tensorflow-low-level-api/" rel="next" title="tensorflow low level api">
-                <i class="fa fa-chevron-left"></i> tensorflow low level api
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/tensorflow-debug/" rel="prev" title="tensorflow debug">
-                tensorflow debug <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -542,15 +507,18 @@
   </article>
 
 
-  </div>
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
 
 
           </div>
           
-
-  
-
-
 
         </div>
         
@@ -571,17 +539,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -703,23 +662,6 @@
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-global-variables-initializer"><span class="nav-number">1.</span> <span class="nav-text">tf.global_variables_initializer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表面上"><span class="nav-number">1.1.</span> <span class="nav-text">表面上</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量类型"><span class="nav-number">1.2.</span> <span class="nav-text">变量类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际上"><span class="nav-number">1.3.</span> <span class="nav-text">实际上</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意点"><span class="nav-number">1.4.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">1.5.</span> <span class="nav-text">参考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-control-dependencies"><span class="nav-number">2.</span> <span class="nav-text">tf.control_dependencies</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       
@@ -849,10 +791,6 @@
 
 
   
-  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
-<script src="/js/src/post-details.js?v=7.0.0"></script>
-
-
 
   
 
@@ -863,8 +801,6 @@
 
   
 
-
-  
 
 
   

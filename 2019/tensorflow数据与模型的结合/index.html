@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="StanPcf&#39;s Note">
 <meta property="og:description" content="引言tensorflow主流的编程姿势有三种:  使用low level api 使用keras 使用estimator  一个比较好的机器学习程序是data与model的分离。data作为数据流流入model从而训练model。tensorflow的这三种编程姿势也是按照这个趋势来走的。特别是在这几天出来的tensorflow2.0版本里面将tf.Session编程tf.function，更是将">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-08T17:50:43.175Z">
+<meta property="og:updated_time" content="2019-03-08T17:54:22.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tensorflow数据与模型的结合">
 <meta name="twitter:description" content="引言tensorflow主流的编程姿势有三种:  使用low level api 使用keras 使用estimator  一个比较好的机器学习程序是data与model的分离。data作为数据流流入model从而训练model。tensorflow的这三种编程姿势也是按照这个趋势来走的。特别是在这几天出来的tensorflow2.0版本里面将tf.Session编程tf.function，更是将">
@@ -400,7 +400,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-03-09 01:50:43" itemprop="dateModified" datetime="2019-03-09T01:50:43+08:00">2019-03-09</time>
+                <time title="Modified: 2019-03-09 01:54:22" itemprop="dateModified" datetime="2019-03-09T01:54:22+08:00">2019-03-09</time>
               
             
           </span>
@@ -484,6 +484,7 @@
 <li><p>在2.0时代<code>tf.feature_columns.input_layer</code>这个函数不存在了，取而代之是<code>InputLayer</code>这个函数。主要原因是tensorflow的趋势是一切皆keras编程，所以这个函数只接受<code>feature_columns</code>，然后模仿的是keras的Layer行为，在<strong>call</strong>函数里面去传入features，所以行为演变成了keras的行为，即<code>Input</code>与<code>model=Model(inputs, outputs)</code>定义了模型的入口。</p>
 </li>
 </ul>
+<p>在<a href="https://github.com/tensorflow/models/blob/master/samples/core/get_started/custom_estimator.py" target="_blank" rel="noopener"><code>custom_estimator.py</code></a>里面有如何使用estimator编程，注意这是1.x版本的tensorflow。</p>
 
       
     </div>

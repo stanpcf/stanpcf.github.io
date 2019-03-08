@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="引言tensorflow主流的编程姿势有三种:  使用low level api 使用keras 使用estimator  一个比较好的机器学习程序是data与model的分离。data作为数据流流入model从而训练model。tensorflow的这三种编程姿势也是按照这个趋势来走的。特别是在这几天出来的tensorflow2.0版本里面将tf.Session编程tf.function，更是将">
+<meta name="keywords" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorflow数据与模型的结合">
+<meta property="og:url" content="http://stanpcf.github.io/2019/tensorflow数据与模型的结合/index.html">
+<meta property="og:site_name" content="StanPcf&#39;s Note">
+<meta property="og:description" content="引言tensorflow主流的编程姿势有三种:  使用low level api 使用keras 使用estimator  一个比较好的机器学习程序是data与model的分离。data作为数据流流入model从而训练model。tensorflow的这三种编程姿势也是按照这个趋势来走的。特别是在这几天出来的tensorflow2.0版本里面将tf.Session编程tf.function，更是将">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-08T17:50:43.175Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tensorflow数据与模型的结合">
+<meta name="twitter:description" content="引言tensorflow主流的编程姿势有三种:  使用low level api 使用keras 使用estimator  一个比较好的机器学习程序是data与model的分离。data作为数据流流入model从而训练model。tensorflow的这三种编程姿势也是按照这个趋势来走的。特别是在这几天出来的tensorflow2.0版本里面将tf.Session编程tf.function，更是将">
+
+
+
+
+
+
+  <link rel="canonical" href="http://stanpcf.github.io/2019/tensorflow数据与模型的结合/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>tensorflow数据与模型的结合 | StanPcf's Note</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StanPcf's Note</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stanpcf.github.io/2019/tensorflow数据与模型的结合/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stanpcf">
+      <meta itemprop="description" content="一枚爱生活的nlp算法喵">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StanPcf's Note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">tensorflow数据与模型的结合
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-03-08 23:35:13" itemprop="dateCreated datePublished" datetime="2019-03-08T23:35:13+08:00">2019-03-08</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-03-09 01:50:43" itemprop="dateModified" datetime="2019-03-09T01:50:43+08:00">2019-03-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tensorflow/" itemprop="url" rel="index"><span itemprop="name">tensorflow</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>tensorflow主流的编程姿势有三种:</p>
+<ul>
+<li>使用low level api</li>
+<li>使用keras</li>
+<li>使用estimator</li>
+</ul>
+<p>一个比较好的机器学习程序是data与model的分离。data作为数据流流入model从而训练model。tensorflow的这三种编程姿势也是按照这个趋势来走的。特别是在这几天出来的tensorflow2.0版本里面将tf.Session编程tf.function，更是将这一思想表现的淋漓尽致。而在estimator、keras这些高阶api里面，这一思想更不用说。</p>
+<p>我们都知道做实验都需要将材料放入反应堆里面，不同的材料从不同的入口流进反应堆。同样在tensorflow里面也是这样的，一条数据(比如说seq2seq模型，一条数据经过处理达到可以直接灌入模型前通常会被处理成三部分, ids, text_len, masks)灌入模型，数据的不同部分需要从不同的入口进入模型。</p>
+<p><strong>所以模型入口和数据的不同部分(特征)是一一对应的。</strong></p>
+<p>在tensorflow里面，所有的编程姿势都离不开上面这句话。本篇博客将简要介绍一下上面的这个思想，<strong>从模型入口、数据的不同部分、他们如何一一对应</strong>这三要素讲解如上三种tensorflow编程姿势。</p>
+<h1 id="low-level-api"><a href="#low-level-api" class="headerlink" title="low level api"></a>low level api</h1><p>这部分是tensorflow早期(1.x时代的)一种编程模式</p>
+<p>其<strong>模型入口</strong>使用<code>tf.placeholder</code>来定义，需要指定shape, type。</p>
+<p>其<strong>数据的不同部分</strong>编程者心里有数就行， 每一部分都使用list来表示</p>
+<p>而<strong>他们如何一一对应</strong>使用的是<code>tf.Session.run</code>这个方法的<code>feed_dict</code>参数来实现的，这个参数接受一个dict, dict的key是<code>tf.placeholder</code>的实例，这个实例定义了从这个入口进入的数据的type及类型。<br>如下是tensorflow1.1.0版本的mnist官方实现的<a href="https://github.com/tensorflow/tensorflow/blob/1ec6ed51182adf8f1b03a3188c16cd8a45ca6c85/tensorflow/examples/tutorials/mnist/fully_connected_feed.py#L80" target="_blank" rel="noopener">feed_dict</a>，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fill_feed_dict</span><span class="params">(data_set, images_pl, labels_pl)</span>:</span></span><br><span class="line">  <span class="string">"""Fills the feed_dict for training the given step.</span></span><br><span class="line"><span class="string">  A feed_dict takes the form of:</span></span><br><span class="line"><span class="string">  feed_dict = &#123;</span></span><br><span class="line"><span class="string">      &lt;placeholder&gt;: &lt;tensor of values to be passed for placeholder&gt;,</span></span><br><span class="line"><span class="string">      ....</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  Args:</span></span><br><span class="line"><span class="string">    data_set: The set of images and labels, from input_data.read_data_sets()</span></span><br><span class="line"><span class="string">    images_pl: The images placeholder, from placeholder_inputs().</span></span><br><span class="line"><span class="string">    labels_pl: The labels placeholder, from placeholder_inputs().</span></span><br><span class="line"><span class="string">  Returns:</span></span><br><span class="line"><span class="string">    feed_dict: The feed dictionary mapping from placeholders to values.</span></span><br><span class="line"><span class="string">  """</span></span><br><span class="line">  <span class="comment"># Create the feed_dict for the placeholders filled with the next</span></span><br><span class="line">  <span class="comment"># `batch size` examples.</span></span><br><span class="line">  images_feed, labels_feed = data_set.next_batch(FLAGS.batch_size,</span><br><span class="line">                                                 FLAGS.fake_data)</span><br><span class="line">  feed_dict = &#123;</span><br><span class="line">      images_pl: images_feed,</span><br><span class="line">      labels_pl: labels_feed,</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> feed_dict</span><br></pre></td></tr></table></figure>
+<p>我们可以看到其就是使用placeholder同数据的不同部分的一一对应来实现模型的训练的</p>
+<h1 id="keras"><a href="#keras" class="headerlink" title="keras"></a>keras</h1><p>其<strong>模型入口</strong>使用<code>keras.Input</code>来定义，需要指定shape, type。</p>
+<p>其<strong>数据的不同部分</strong>编程者心里有数就行， 每一部分都使用list或者generator来表示</p>
+<p>而<strong>他们如何一一对应</strong>使用的是<code>keras.Model.fit</code>这个方法的<code>x</code>、<code>y</code>参数来实现的，这两个参数接受一个dict或者list, 或者单个的数据array。<br>如果为dict的话，那么在模型入口这个<code>keras.Input</code>必须指定<code>name</code>参数，这个name参数就是这个dict的key, value为从这个入口进去的数据。<br>如果为list的话，那么在<code>model=Model(inputs, outputs)</code>里面，inputs必须为list，且同x必须长度相等，同一个index位置代表着入口和一一对应的数据<br>如果为单个array的话，那么自然就一一对应了</p>
+<p>如下是keras的编程的一个example</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">data = np.random.random((<span class="number">1000</span>, <span class="number">32</span>))</span><br><span class="line">labels = np.random.random((<span class="number">1000</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">inputs = tf.keras.Input(shape=(<span class="number">32</span>,))  <span class="comment"># Returns a placeholder tensor</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># A layer instance is callable on a tensor, and returns a tensor.</span></span><br><span class="line">x = layers.Dense(<span class="number">64</span>, activation=<span class="string">'relu'</span>)(inputs)</span><br><span class="line">x = layers.Dense(<span class="number">64</span>, activation=<span class="string">'relu'</span>)(x)</span><br><span class="line">predictions = layers.Dense(<span class="number">10</span>, activation=<span class="string">'softmax'</span>)(x)</span><br><span class="line"></span><br><span class="line">model = tf.keras.Model(inputs=inputs, outputs=predictions)</span><br><span class="line"></span><br><span class="line"><span class="comment"># The compile step specifies the training configuration.</span></span><br><span class="line">model.compile(optimizer=tf.train.RMSPropOptimizer(<span class="number">0.001</span>),</span><br><span class="line">              loss=<span class="string">'categorical_crossentropy'</span>,</span><br><span class="line">              metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Trains for 5 epochs</span></span><br><span class="line">model.fit(data, labels, batch_size=<span class="number">32</span>, epochs=<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="estimator"><a href="#estimator" class="headerlink" title="estimator"></a>estimator</h1><p>在estimator里面需要实例化一个Estimator来编程。实例化的时候需要传入<code>model_fn</code>来定义模型。而在<code>Estimator.train</code>里面传入<code>input_fn</code>来给模型传入数据。那么如何实现上面的三要素的呢</p>
+<p>其<strong>模型入口</strong>使用<code>model_fn</code>来实现，<code>model_fn</code>签名为<code>model_fn(features, labels, mode, parmas, config)</code>，features, labels应该为单输入或者是dict。单输入则为<code>tf.Tensor</code>，dict的的key为一个字符串，value为<code>tf.Tensor</code>。</p>
+<p>其<strong>数据的不同部分</strong>需要<code>input_fn</code>来实现，这个函数需要返回features，labels。如果模型单输入就无所谓了，直接返回。如果是多输入则需要features和labels各自返回dict，dict的key为字符串，value为数据的不同部分。</p>
+<p>而<strong>他们如何一一对应</strong>。如果是单输入自然不存在一一对应的问题。如果多输入的话，从上面我们可以看到，<code>model_fn</code>的features同<code>input_fn</code>的返回的features都为dict, 他们的key即是一一对应的标识符。<code>input_fn</code>的features数据的各部分根据他们的key寻找<code>model_fn</code>的features里面对应的key的value(即<code>tf.Tensor</code>)。根据这个key实现两个value的一一对应。</p>
+<p>这个地方需要注意的是，在写<code>model_fn</code>的时候需要在config参数里面定义<code>feature_columns</code>。</p>
+<ul>
+<li><p>在1.x里面通过<code>tf.feature_columns.input_layer</code>来实现<code>model_fn</code>的<code>features</code>与<code>feature_columns</code>绑定。<code>feature_columns</code>定义了各个key(这里model_fn与input_fn的key相同就不用解释了)的类型与shape。</p>
+</li>
+<li><p>在2.0时代<code>tf.feature_columns.input_layer</code>这个函数不存在了，取而代之是<code>InputLayer</code>这个函数。主要原因是tensorflow的趋势是一切皆keras编程，所以这个函数只接受<code>feature_columns</code>，然后模仿的是keras的Layer行为，在<strong>call</strong>函数里面去传入features，所以行为演变成了keras的行为，即<code>Input</code>与<code>model=Model(inputs, outputs)</code>定义了模型的入口。</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/tensorflow-hub/" rel="next" title="tensorflow_hub">
+                <i class="fa fa-chevron-left"></i> tensorflow_hub
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="stanpcf">
+            
+              <p class="site-author-name" itemprop="name">stanpcf</p>
+              <p class="site-description motion-element" itemprop="description">一枚爱生活的nlp算法喵</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/stanpcf" title="GitHub &rarr; https://github.com/stanpcf" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:fpchappy@gmail.com" title="E-Mail &rarr; mailto:fpchappy@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#low-level-api"><span class="nav-number">2.</span> <span class="nav-text">low level api</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#keras"><span class="nav-number">3.</span> <span class="nav-text">keras</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#estimator"><span class="nav-number">4.</span> <span class="nav-text">estimator</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stanpcf</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
